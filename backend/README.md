@@ -11,6 +11,14 @@ Install all dependencies:
 pip install -r requirements.txt
 ```
 
+How to install python and pip? Go to the website:
+
+```bash
+https://www.python.org/downloads/
+```
+
+When installing python, check the box that installs pip.
+
 ## Before first run
 
 Make sure all requirements are installed before starting the application.
