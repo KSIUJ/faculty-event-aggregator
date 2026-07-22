@@ -21,6 +21,9 @@ If you are developing a production application, we recommend using TypeScript wi
 1. Type in terminal:
    `cd frontend`
 2. Install dependencies:
-   `npm install`
+   `nvm install 22`
 3. Run by typing:
+   `nvm use 22`
+   `npm install`
    `npm run dev`
+   
