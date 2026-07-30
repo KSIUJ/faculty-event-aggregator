@@ -5,53 +5,52 @@ from sqlalchemy.orm import relationship, declarative_base
 Base = declarative_base()
 
 class Event(Base):
-    __tablename__ = 'event'
-
-    id = Column(BigInteger, primary_key=True)
+    __tablename__ = "event",
+    id = Column(BigInteger, primary_key=True, nullable=False)
     title = Column(String, nullable=False)
-    description = Column(Text)
-    location = Column(String)
-    start_time = Column(DateTime)
-    end_time = Column(DateTime)
-    created_at = Column(DateTime)
-    organizer_id = Column(BigInteger, ForeignKey('organizer.id'))
-    event_category_id = Column(BigInteger, ForeignKey('event_category.id'))
-    topic_category_id = Column(BigInteger,ForeignKey('topic_category.id'))
+    description = Column(Text, nullable=True)
+    location = Column(String, nullable=True)
+    start_time = Column(DateTime, nullable=False)
+    end_time = Column(DateTime, nullable=True)
+    created_at = Column(DateTime, nullable=False)
+    organizer_id = Column(BigInteger, ForeignKey("organizer.id"), nullable=False)
+    event_category_id = Column(BigInteger, ForeignKey("event_category.id"), nullable=False)
+    topic_category_id = Column(BigInteger,ForeignKey("topic_category.id"), nullable=False)
 
     event_category = relationship("EventCategory", back_populates="event")
     topic_category = relationship("TopicCategory", back_populates="event")
     organizer = relationship("Organizer", back_populates="event")
 
 class EventCategory(Base):
-    __tablename__ = 'event_category'
+    __tablename__ = "event_category"
 
-    id = Column(BigInteger, primary_key=True)
-    icon_name = Column(String)
-    created_at = Column(DateTime)
+    id = Column(BigInteger, primary_key=True, nullable=False)
     title = Column(String, nullable=False)
+    icon_name = Column(String, nullable=True)
+    created_at = Column(DateTime, nullable=False)
 
-    event = relationship("Event", back_populates="event_category")
+    events = relationship("Event", back_populates="event_category")
 
 class Organizer(Base):
-    __tablename__ = 'organizer'
+    __tablename__ = "organizer"
 
-    id = Column(BigInteger, primary_key=True)
-    name = Column(String)
-    type = Column(String)
-    logo_url = Column(String)
-    website_url = Column(String)
-    description = Column(Text)
-    created_at = Column(DateTime)
+    id = Column(BigInteger, primary_key=True, nullable=False)
+    name = Column(String, nullable=False)
+    type = Column(String, nullable=False)
+    logo_url = Column(String, nullable=True)
+    website_url = Column(String, nullable=True)
+    description = Column(Text, nullable=True)
+    created_at = Column(DateTime, nullable=False)
 
-    event = relationship("Event", back_populates="organizer")
+    events = relationship("Event", back_populates="organizer")
 
 class TopicCategory(Base):
-    __tablename__ = 'topic_category'
+    __tablename__ = "topic_category"
 
-    id = Column(BigInteger, primary_key=True)
-    icon_name = Column(String)
-    created_at = Column(DateTime)
+    id = Column(BigInteger, primary_key=True, nullable=False)
     title = Column(String, nullable=False)
+    icon_name = Column(String, nullable=True)
+    created_at = Column(DateTime, nullable=False)
 
-    event = relationship("Event", back_populates="topic_category")
+    events = relationship("Event", back_populates="topic_category")
 
