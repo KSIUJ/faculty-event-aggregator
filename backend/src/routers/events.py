@@ -1,6 +1,6 @@
 from fastapi import APIRouter, HTTPException
 
-from schemas import EventResponse
+from schemas import EventListResponse, EventResponse
 from services.event_service import (
     get_all_events,
     get_event_by_id,
@@ -9,7 +9,7 @@ from services.event_service import (
 router = APIRouter(prefix="/events", tags=["Events"])
 
 
-@router.get("", response_model=list[EventResponse])
+@router.get("", response_model=list[EventListResponse])
 def read_events():
     return get_all_events()
 
