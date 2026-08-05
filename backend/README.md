@@ -69,7 +69,7 @@ docker compose up -d
 Run the backend server:
 
 ```bash
-uvicorn src.main:app --reload
+uvicorn main:app --app-dir src --reload
 ```
 
 The application will start at:
