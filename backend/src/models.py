@@ -5,7 +5,7 @@ from sqlalchemy.orm import relationship, declarative_base
 Base = declarative_base()
 
 class Event(Base):
-    __tablename__ = "event",
+    __tablename__ = "event"
     id = Column(BigInteger, primary_key=True, nullable=False)
     title = Column(String, nullable=False)
     description = Column(Text, nullable=True)
