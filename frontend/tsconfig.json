@@ -24,6 +24,10 @@
 
     // Bundler mode
     "moduleResolution": "bundler",
+    "paths": {
+      "@/*": ["./src/*"],
+      "@": ["./src/types/index.ts"]
+    },
     "allowImportingTsExtensions": true,
     "resolveJsonModule": true,
     "isolatedModules": true,

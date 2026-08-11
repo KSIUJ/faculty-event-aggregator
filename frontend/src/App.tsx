@@ -1,7 +1,5 @@
-import DisplayPage from './pages/DisplayPage.tsx'
+import DisplayPage from '@/pages/DisplayPage'
 
-function App() {
+export default function App() {
     return <DisplayPage />
 }
-
-export default App
