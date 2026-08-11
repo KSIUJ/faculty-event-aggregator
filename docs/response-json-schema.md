@@ -1,7 +1,5 @@
 # API response schemas
 
-Updated  API response schema with proposed changes.
-
 ## Conventions
 
 - JSON property names use `snake_case`.

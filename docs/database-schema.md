@@ -1,6 +1,4 @@
-# 📌 Proposed Database Schema
-
----
+# Database Schema
 
 ## 🗓️ Event
 

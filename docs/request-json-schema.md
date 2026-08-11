@@ -1,4 +1,4 @@
-# Api request schemas
+# API request schemas
 
 ## Conventions
 
