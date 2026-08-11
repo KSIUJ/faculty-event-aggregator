@@ -15,7 +15,7 @@ export const events: Event[] = [
         end_time: "2026-08-10T14:00:00Z",
         created_at: "2026-07-01T10:00:00Z",
         event_category: eventCategories[0],
-        topic_category: topicCategories[0],
+        topic_categories: topicCategories,
         organizer: organizers[0]
     },
     {
@@ -28,7 +28,7 @@ export const events: Event[] = [
         end_time: "2026-09-01T12:00:00Z",
         created_at: "2026-07-05T10:00:00Z",
         event_category: eventCategories[1],
-        topic_category: topicCategories[1],
+        topic_categories: topicCategories,
         organizer: organizers[0]
     }
 ]
@@ -41,6 +41,6 @@ export const eventList: EventList = {
     end_time: "2026-08-10T14:00:00Z",
     created_at: "2026-07-01T10:00:00Z",
     event_category: eventCategories[0],
-    topic_category: topicCategories[0],
+    topic_categories: topicCategories,
     organizer: organizers[0]
 }

@@ -1,4 +1,5 @@
 import type { EventList } from '@/types'
+import RenderTopic from './RenderTopic'
 
 interface EventItemProps {
     event: EventList
@@ -11,7 +12,8 @@ export default function EventItem({ event }: EventItemProps) {
             <p>{event.location ?? 'Location not specified'}</p>
             <p>Category: {event.event_category.title}</p>
             <p>Organizer: {event.organizer.name}</p>
-            <p>Topic: {event.topic_category.title}</p>
+            <p>Topics:</p>
+            <RenderTopic topics={event.topic_categories} />
         </article>
     )
 }

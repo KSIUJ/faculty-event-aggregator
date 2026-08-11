@@ -6,8 +6,8 @@ export interface EventList {
     end_time: string | null
     created_at: string
     event_category: EventCategory
+    topic_categories: TopicCategory[]
     organizer: Organizer
-    topic_category: TopicCategory
 }
 
 export interface Event extends EventList {

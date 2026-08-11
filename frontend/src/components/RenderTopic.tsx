@@ -1,13 +1,19 @@
 import type { TopicCategory } from '@/types'
 
 interface TopicProps {
-    topic: TopicCategory
-}   
+    topics: TopicCategory[]
+}
 
-export default function RenderTopic({ topic }: TopicProps) {
+export default function RenderTopic({ topics }: TopicProps) {
+    if (topics.length === 0) {
+        return <p>No topics specified</p>
+    }
+
     return (
-        <span>
-            {topic.title}
-        </span>
+        <ul>
+            {topics.map((topic) => (
+                <li key={topic.id}>{topic.title}</li>
+            ))}
+        </ul>
     )
 }
