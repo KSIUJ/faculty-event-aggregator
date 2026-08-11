@@ -34,7 +34,7 @@ Compact event returned by `GET /events`.
 | `created_at` | ISO 8601 string | NO | Creation date and time |
 | `event_category` | `EventCategory` | NO | Event category |
 | `organizer` | `Organizer` | NO | Event organizer |
-| `topic_category` | `TopicCategory` | NO | Event topic |
+| `topic_categories` | `TopicCategory[]` | NO | Event topics |
 
 Example `GET /events` response:
 
@@ -62,12 +62,20 @@ Example `GET /events` response:
       "description": "Technology education organization.",
       "created_at": "2026-07-01T10:00:00+02:00"
     },
-    "topic_category": {
-      "id": 5,
-      "title": "Web Development",
-      "icon_name": "web",
-      "created_at": "2026-07-01T10:00:00+02:00"
-    }
+    "topic_categories": [
+      {
+        "id": 5,
+        "title": "Web Development",
+        "icon_name": "web",
+        "created_at": "2026-07-01T10:00:00+02:00"
+      },
+      {
+        "id": 8,
+        "title": "API Design",
+        "icon_name": "api",
+        "created_at": "2026-07-01T10:00:00+02:00"
+      }
+    ]
   }
 ]
 ```
@@ -87,7 +95,7 @@ Event returned by `GET /events/{id}`.
 | `created_at` | ISO 8601 string | NO | Creation date and time |
 | `event_category` | `EventCategory` | NO | Event category |
 | `organizer` | `Organizer` | NO | Event organizer |
-| `topic_category` | `TopicCategory` | NO | Event topic |
+| `topic_categories` | `TopicCategory[]` | NO | Event topics |
 
 Example `GET /events/42` response:
 
@@ -115,12 +123,20 @@ Example `GET /events/42` response:
     "description": "Technology education organization.",
     "created_at": "2026-07-01T10:00:00+02:00"
   },
-  "topic_category": {
-    "id": 5,
-    "title": "Web Development",
-    "icon_name": "web",
-    "created_at": "2026-07-01T10:00:00+02:00"
-  }
+  "topic_categories": [
+    {
+      "id": 5,
+      "title": "Web Development",
+      "icon_name": "web",
+      "created_at": "2026-07-01T10:00:00+02:00"
+    },
+    {
+      "id": 8,
+      "title": "API Design",
+      "icon_name": "api",
+      "created_at": "2026-07-01T10:00:00+02:00"
+    }
+  ]
 }
 ```
 

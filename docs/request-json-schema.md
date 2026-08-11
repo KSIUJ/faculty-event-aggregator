@@ -31,7 +31,7 @@
 | `end_time` | ISO 8601 string | NO | YES | End date and time |
 | `event_category_id` | integer | NO | NO | Event category id |
 | `organizer_id` | integer | NO | NO | Event organizer id |
-| `topic_category_id` | integer | NO | NO | Event topic category id |
+| `topic_category_ids` | integer[] | NO | NO | Event topic category IDs |
 
 Example `POST /events`
 
@@ -43,7 +43,7 @@ Example `POST /events`
     "end_time": "2026-10-16T17:00:00+02:00",
     "event_category_id": 6,
     "organizer_id": 7,
-    "topic_category_id": 4
+    "topic_category_ids": [4, 5]
 }
 ```
 
@@ -57,7 +57,7 @@ Example `POST /events`
 | `end_time` | ISO 8601 string | YES | YES | End date and time |
 | `event_category_id` | integer | YES | NO | Event category id |
 | `organizer_id` | integer | YES | NO | Event organizer id |
-| `topic_category_id` | integer | YES | NO | Event topic category id |
+| `topic_category_ids` | integer[] | YES | NO | Event topic category IDs |
 
 Example `PATCH /events/{id}` request(Change title and event duration):
 
@@ -65,7 +65,8 @@ Example `PATCH /events/{id}` request(Change title and event duration):
 {
     "title": "AI Tech Summit",
     "start_time": "2026-10-15T09:03:00+02:00",
-    "end_time": "2026-10-16T17:03:00+02:00"
+    "end_time": "2026-10-16T17:03:00+02:00",
+    "topic_category_ids": [4, 8]
 }
 ```
 
