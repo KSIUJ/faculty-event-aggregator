@@ -1,4 +1,5 @@
-export const topicCategories = [
+import { TopicCategory } from '../../types';
+export const topicCategories: TopicCategory[] = [
     {
         id: "topic-1",
         title: "Web Development",

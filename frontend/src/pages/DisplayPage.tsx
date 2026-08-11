@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
-import { getAllEventCategories, getAllEvents, getAllOrganizers, getAllTopicCategories } from '../services/index.js'
-import { addEventDetails } from '../util/eventData.js'
-import RenderEvent from '../components/RenderEvent.jsx'
+import { getAllEventCategories, getAllEvents, getAllOrganizers, getAllTopicCategories } from '../services/index'
+import { addEventDetails } from '../util/eventData'
+import RenderEvent from '../components/RenderEvent'
 
 
 

@@ -1,4 +1,4 @@
-import RenderTopic from './RenderTopic.jsx'
+import RenderTopic from './RenderTopic'
 
 export default function RenderEvent({ event }) {
     return (

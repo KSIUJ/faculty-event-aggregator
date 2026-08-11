@@ -1,5 +1,6 @@
+import { Event, EventCategory, TopicCategory, Organizer } from '../types';
 
-export function addEventDetails(events, eventCategories, topicCategories, organizers) {
+export function addEventDetails(events: Event[], eventCategories: EventCategory[], topicCategories: TopicCategory[], organizers: Organizer[]) {
     return events.map((event) => ({
         ...event,
         eventCategory: eventCategories.find(
@@ -15,3 +16,4 @@ export function addEventDetails(events, eventCategories, topicCategories, organi
             .filter(Boolean)
     }))
 }
+    

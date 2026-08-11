@@ -1,4 +1,5 @@
-export const eventCategories = [
+import { EventCategory } from '../../types';
+export const eventCategories: EventCategory[] = [
     {
         id: "category-1",
         title: "Workshop",

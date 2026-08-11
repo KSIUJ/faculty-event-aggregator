@@ -1,4 +1,5 @@
-export const organizers = [
+import { Organizer } from "../../types";
+export const organizers: Organizer[] = [
     {
         id: "organizer-1",
         name: "Tech Academy",

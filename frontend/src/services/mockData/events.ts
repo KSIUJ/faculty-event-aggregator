@@ -1,4 +1,5 @@
-export const events = [
+import { Event } from '../../types';
+export const events: Event[] = [
     {
         id: "event-1",
         title: "Introduction to React",

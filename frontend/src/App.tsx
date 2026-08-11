@@ -1,4 +1,4 @@
-import DisplayPage from './pages/DisplayPage.jsx'
+import DisplayPage from './pages/DisplayPage.tsx'
 
 function App() {
     return <DisplayPage />
