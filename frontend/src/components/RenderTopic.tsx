@@ -1,8 +1,13 @@
-import { TopicCategory } from '../types';
-interface RenderTopicProps {
-    topic: TopicCategory;
+import type { TopicCategory } from '@/types'
+
+interface TopicProps {
+    topic: TopicCategory
 }   
 
-export default function RenderTopic({ topic }: RenderTopicProps) {
-    return <span>{topic.title}</span>
+export default function RenderTopic({ topic }: TopicProps) {
+    return (
+        <span>
+            {topic.title}
+        </span>
+    )
 }

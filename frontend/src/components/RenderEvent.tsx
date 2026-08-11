@@ -1,42 +1,17 @@
-import RenderTopic from './RenderTopic'
-import { Event } from '../types';
-interface RenderEventProps {
-    event: Event
+import type { EventList } from '@/types'
+
+interface EventItemProps {
+    event: EventList
 }
-export default function RenderEvent({ event }: RenderEventProps) {
+
+export default function EventItem({ event }: EventItemProps) {
     return (
         <article>
             <h2>{event.title}</h2>
-            <p>{event.description}</p>
-            <p>
-                <strong>Date:</strong>{' '}
-                <time dateTime={event.start_time}>
-                    {new Date(event.start_time).toLocaleString()}
-                </time>
-            </p>
-            <p>
-                <strong>Location:</strong> {event.location ?? 'Not specified'}
-            </p>
-            <p>
-                <strong>Category:</strong>{' '}
-                {event.eventCategory?.title ?? 'Not specified'}
-            </p>
-            <p><strong>Topics:</strong></p>
-            {!event.topicCategories || event.topicCategories.length === 0 ? (
-                <p>Not specified</p>
-            ) : (
-                <ul>
-                    {event.topicCategories.map((topic) => (
-                        <li key={topic.id}>
-                            <RenderTopic topic={topic} />
-                        </li>
-                    ))}
-                </ul>
-            )}
-            <p>
-                <strong>Organizer:</strong>{' '}
-                {event.organizer?.name ?? 'Not specified'}
-            </p>
+            <p>{event.location ?? 'Location not specified'}</p>
+            <p>Category: {event.event_category.title}</p>
+            <p>Organizer: {event.organizer.name}</p>
+            <p>Topic: {event.topic_category.title}</p>
         </article>
     )
 }
