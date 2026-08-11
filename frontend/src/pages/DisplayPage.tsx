@@ -2,11 +2,11 @@ import { useEffect, useState } from 'react'
 import { getAllEventCategories, getAllEvents, getAllOrganizers, getAllTopicCategories } from '../services/index'
 import { addEventDetails } from '../util/eventData'
 import RenderEvent from '../components/RenderEvent'
-
+import { Event } from '../types';
 
 
 export default function DisplayPage() {
-    const [events, setEvents] = useState(null)
+    const [events, setEvents] = useState<Event[] | null>(null)
     const [error, setError] = useState(false)
 
     useEffect(() => {
@@ -19,7 +19,7 @@ export default function DisplayPage() {
                     getAllOrganizers(),
                 ])
 
-                setEvents(addEventDetails(...data))
+                setEvents(addEventDetails(...data) as Event[])
             } catch {
                 setError(true)
             }

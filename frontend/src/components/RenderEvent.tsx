@@ -1,6 +1,9 @@
 import RenderTopic from './RenderTopic'
-
-export default function RenderEvent({ event }) {
+import { Event } from '../types';
+interface RenderEventProps {
+    event: Event
+}
+export default function RenderEvent({ event }: RenderEventProps) {
     return (
         <article>
             <h2>{event.title}</h2>
@@ -19,7 +22,7 @@ export default function RenderEvent({ event }) {
                 {event.eventCategory?.title ?? 'Not specified'}
             </p>
             <p><strong>Topics:</strong></p>
-            {event.topicCategories.length === 0 ? (
+            {!event.topicCategories || event.topicCategories.length === 0 ? (
                 <p>Not specified</p>
             ) : (
                 <ul>

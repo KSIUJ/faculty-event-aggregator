@@ -30,4 +30,8 @@ export interface Event {
     event_category_id: string
     organizer_id: string
     created_at: string
+    
+    eventCategory?: EventCategory;
+    topicCategories?: TopicCategory[];
+    organizer?: Organizer;
 }
