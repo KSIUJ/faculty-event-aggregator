@@ -1,7 +1,8 @@
-import { Organizer } from "../../types";
+import { Organizer } from "@/types"
+
 export const organizers: Organizer[] = [
     {
-        id: "organizer-1",
+        id: 1,
         name: "Tech Academy",
         type: "ORGANIZATION",
         logo_url: "https://example.com/logo.png",
@@ -9,4 +10,4 @@ export const organizers: Organizer[] = [
         description: "Technology education organization.",
         created_at: "2026-07-01T10:00:00Z"
     }
-];
+]
