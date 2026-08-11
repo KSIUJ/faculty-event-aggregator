@@ -1,11 +1,13 @@
-import { organizers } from "./mockData/organizers";
+import type { Organizer } from '@/types'
+import { organizers } from "@/services/mockData/organizers"
 
-export async function getAllOrganizers() {
-    return organizers;
+
+export async function getAllOrganizers(): Promise<Organizer[]> {
+    return organizers
 }
 
-export async function getOrganizerById(id: string) {
+export async function getOrganizerById(id: number): Promise<Organizer | undefined> {
     return organizers.find(
         (organizer) => organizer.id === id
-    );
+    )
 }

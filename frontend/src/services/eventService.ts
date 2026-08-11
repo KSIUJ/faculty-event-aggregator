@@ -1,9 +1,13 @@
-import { events } from "./mockData/events";
+import type { EventList, Event } from '@/types'
+import { events, eventList } from "@/services/mockData/events"
 
-export async function getAllEvents() {
-    return events;
+
+export async function getAllEvents(): Promise<EventList> {
+    return eventList
 }
 
-export async function getEventById(id: string) {
-    return events.find((event) => event.id === id);
+export async function getEventById(id: number): Promise<Event | undefined> {
+    return events.find(
+        (event: Event) => event.id === id
+    )
 }
