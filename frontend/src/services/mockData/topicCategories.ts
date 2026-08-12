@@ -1,14 +1,16 @@
-export const topicCategories = [
+import { TopicCategory } from '@/types'
+
+export const topicCategories: TopicCategory[] = [
     {
-        id: "topic-1",
+        id: 1,
         title: "Web Development",
         icon_name: "web",
         created_at: "2026-07-01T10:00:00Z"
     },
     {
-        id: "topic-2",
+        id: 2,
         title: "Artificial Intelligence",
         icon_name: "robot",
         created_at: "2026-07-01T10:00:00Z"
     }
-];
+]
