@@ -15,12 +15,14 @@ EVENTS = [
             "icon_name": "tools",
             "created_at": datetime(2026, 7, 1),
         },
-        "topic_category": {
-            "id": 2,
-            "title": "Backend",
-            "icon_name": "server",
-            "created_at": datetime(2026, 7, 1),
-        },
+        "topic_categories": [
+            {
+                "id": 2,
+                "title": "Backend",
+                "icon_name": "server",
+                "created_at": datetime(2026, 7, 1),
+            },
+        ],
         "organizer": {
             "id": 1,
             "name": "Python Community",

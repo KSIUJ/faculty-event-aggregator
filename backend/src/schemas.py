@@ -36,7 +36,7 @@ class EventListResponse(BaseModel):
     created_at: datetime
 
     event_category: EventCategoryResponse
-    topic_category: TopicCategoryResponse | None
+    topic_categories: list[TopicCategoryResponse] | None
     organizer: OrganizerResponse
 
 
