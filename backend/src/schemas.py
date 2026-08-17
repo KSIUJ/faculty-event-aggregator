@@ -42,3 +42,54 @@ class EventListResponse(BaseModel):
 
 class EventResponse(EventListResponse):
     description: str | None
+
+
+# REQUEST SCHEMAS
+
+class CreateEventCategory(BaseModel):
+    title: str
+    icon_name: str | None = None
+
+class UpdateEventCategory(BaseModel):
+    title: str | None = None
+    icon_name: str | None = None
+
+class CreateOrganizer(BaseModel):
+    name: str
+    type: str
+    logo_url: str | None = None
+    website_url: str | None = None
+    description: str | None = None
+
+class UpdateOrganizer(BaseModel):
+    name: str | None = None
+    type: str | None = None
+    logo_url: str | None = None
+    website_url: str | None = None
+    description: str | None = None
+
+class CreateTopicCategory(BaseModel):
+    title: str
+    icon_name: str | None = None
+
+class UpdateTopicCategory(BaseModel):
+    title: str | None = None
+    icon_name: str | None = None
+
+class CreateEvent(BaseModel):
+    title: str
+    location: str | None = None
+    start_time: datetime
+    end_time: datetime | None = None
+    event_category_id: int
+    organizer_id: int
+    topic_category_ids: list[int] 
+
+class UpdateEvent(BaseModel):
+    title: str | None = None
+    location: str | None = None
+    start_time: datetime | None = None
+    end_time: datetime | None = None
+    event_category_id: int | None = None
+    organizer_id: int | None = None
+    topic_category_ids: list[int] | None = None
