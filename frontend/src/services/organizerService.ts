@@ -1,13 +1,22 @@
 import type { Organizer } from '@/types'
-import { organizers } from "@/services/mockData/organizers"
 
 
+const API_URL = "http://localhost:8000"
 export async function getAllOrganizers(): Promise<Organizer[]> {
-    return organizers
+   const response = await fetch(`${API_URL}/organizers`)
+   if(!response.ok) {
+    throw new Error(`Failed to fetch organizers: ${response.statusText}`)
+   }
+   const organizers = await response.json()
+   return organizers
 }
 
 export async function getOrganizerById(id: number): Promise<Organizer | undefined> {
-    return organizers.find(
-        (organizer) => organizer.id === id
-    )
+   const response = await fetch(`${API_URL}/organizers/${id}`)
+   if(!response.ok) {
+    throw new Error(`Failed to fetch organizer with ID ${id}: ${response.statusText}`)
+   }
+   const organizer = await response.json()
+   return organizer
 }
+
