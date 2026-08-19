@@ -1,53 +1,49 @@
-from mock_data.event_categories import EVENT_CATEGORIES
-from schemas import UpdateEventCategory, CreateEventCategory
+from sqlalchemy import select
+from sqlalchemy.orm import Session
 
-def get_all_event_categories():
-    return EVENT_CATEGORIES
+from models import EventCategory
+from schemas import CreateEventCategory, UpdateEventCategory
+from database import commit, commit_and_refresh
 
 
-def get_event_category_by_id(event_category_id: int):
-    return next(
-        (
-            event_category
-            for event_category in EVENT_CATEGORIES
-            if event_category["id"] == event_category_id
-        ),
-        None,
-    )
+# GET /event-categories
+def get_all_event_categories(db: Session) -> list[EventCategory]:
+    statement = select(EventCategory).order_by(EventCategory.id)
+    return list(db.scalars(statement).all())
 
-def create_event_category(event_category: CreateEventCategory):
-    new_id = max(c["id"] for c in EVENT_CATEGORIES) + 1 if EVENT_CATEGORIES else 1
 
-    new_event_category = {
-        "id": new_id,
-        "title": event_category.title,
-        "icon_name": event_category.icon_name,
-    }
-    EVENT_CATEGORIES.append(new_event_category)
-    return new_event_category
+# GET /event-categories/{id}
+def get_event_category_by_id(db: Session, event_category_id: int) -> EventCategory | None:
+    return db.get(EventCategory, event_category_id)
 
-def update_event_category(event_category_id: int, event_category: UpdateEventCategory):
-    existing_event_category = next(
-        (c for c in EVENT_CATEGORIES if c["id"] == event_category_id), None
-    )
-    if not existing_event_category:
+
+# POST /event-categories
+def create_event_category(db: Session, payload: CreateEventCategory) -> EventCategory:
+    event_category = EventCategory(**payload.model_dump())
+    db.add(event_category)
+    return commit_and_refresh(db, event_category)
+
+
+# PATCH /event-categories/{id}
+def update_event_category(db: Session, event_category_id: int, payload: UpdateEventCategory) -> EventCategory | None:
+    event_category = db.get(EventCategory, event_category_id)
+
+    if event_category is None:
         return None
 
-    if event_category.title is not None:
-        existing_event_category["title"] = event_category.title
-        
-    if event_category.icon_name is not None:
-        existing_event_category["icon_name"] = event_category.icon_name
+    for field, value in payload.model_dump(exclude_unset=True).items():
+        setattr(event_category, field, value)
+
+    return commit_and_refresh(db, event_category)
 
 
-    return existing_event_category
+# DELETE /event-categories/{id}
+def delete_event_category(db: Session, event_category_id: int) -> bool:
+    event_category = db.get(EventCategory, event_category_id)
 
-def delete_event_category(event_category_id: int):
-    existing_event_category = next(
-        (c for c in EVENT_CATEGORIES if c["id"] == event_category_id), None
-    )
-    if not existing_event_category:
+    if event_category is None:
         return False
 
-    EVENT_CATEGORIES.remove(existing_event_category)
+    db.delete(event_category)
+    commit(db)
     return True
