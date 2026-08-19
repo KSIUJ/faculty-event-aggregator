@@ -1,9 +1,8 @@
 import type { EventCategory } from '@/types/eventCategory'
+import { API_URL } from '@/config'
 
 
-const API_URL = "http://localhost:8000"
 export async function getAllEventCategories(): Promise<EventCategory[]> {
-
     const response = await fetch(`${API_URL}/event-categories`)
     if (!response.ok) {
         throw new Error(`Failed to fetch event categories: ${response.statusText}`)
