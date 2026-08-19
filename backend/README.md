@@ -81,3 +81,13 @@ API documentation is available at:
 ```bash
 http://127.0.0.1:8000/docs
 ```
+
+## Running Tests
+
+Run the test suite using `pytest` (tests use an in-memory SQLite database and do not require Docker to be running):
+
+```bash
+pytest tests/ -v
+```
+
+See [tests/README.md](tests/README.md) for more details and specific test commands.
