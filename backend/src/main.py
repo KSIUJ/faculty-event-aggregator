@@ -13,6 +13,11 @@ from routers import (
     topic_categories_router,
 )
 
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    Base.metadata.create_all(bind=engine)
+    yield
+
 app = FastAPI()
 
 app.add_middleware(
