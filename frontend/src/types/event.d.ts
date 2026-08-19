@@ -13,3 +13,8 @@ export interface EventList {
 export interface Event extends EventList {
     description: string | null
 }
+
+export interface EventFilterParams {
+    event_category?: number
+    topic_category?: number
+}
