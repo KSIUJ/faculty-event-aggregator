@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, HTTPException, Query, status
 from sqlalchemy.orm import Session
 
 from database import get_db
@@ -18,10 +18,17 @@ router = APIRouter(
 
 
 # GET /events
-@router.get("", response_model=list[EventListResponse])
-def read_events(db: Session = Depends(get_db)):
-    return event_service.get_all_events(db)
-
+@router.get("", response_model=list[EventListResponse])                                                                           
+def read_events(
+    event_category: int | None = Query(default=None, description="Filter events by Event Category ID"),                                                   
+    topic_category: int | None = Query(default=None, description="Filter events by Topic Category ID"),
+    db: Session = Depends(get_db)
+):
+    return event_service.get_all_events(
+        db,
+        event_category_id=event_category,
+        topic_category_id=topic_category
+    )
 
 # GET /events/{id}
 @router.get("/{event_id}", response_model=EventResponse)

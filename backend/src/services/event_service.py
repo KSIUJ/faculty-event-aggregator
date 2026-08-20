@@ -70,8 +70,24 @@ def _validate_relations(
 
 
 # GET /events
-def get_all_events(db: Session) -> list[Event]:
+def get_all_events(
+        db: Session,
+        event_category_id: int | None = None,
+        topic_category_id: int | None = None
+    ) -> list[Event]:
+
     statement = select(Event).options(*EVENT_RELATIONSHIPS).order_by(Event.id)
+    
+    if event_category_id is not None:                                                                                             
+        statement = statement.where(
+            Event.event_category_id == event_category_id
+        )                                                 
+                                                                                                                                                                                      
+    if topic_category_id is not None:                                                                                             
+         statement = statement.where(                                                                                              
+            Event.topic_categories.any(TopicCategory.id == topic_category_id) 
+         )
+
     return list(db.scalars(statement).all())
 
 
