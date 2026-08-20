@@ -1,11 +1,22 @@
+from contextlib import asynccontextmanager
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from config import settings
-from routers.event_categories import router as event_categories_router
-from routers.events import router as events_router
-from routers.organizers import router as organizers_router
-from routers.topic_categories import router as topic_categories_router
+from database import engine
+from models import Base
+from routers import (
+    event_categories_router,
+    events_router,
+    organizers_router,
+    topic_categories_router,
+)
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    Base.metadata.create_all(bind=engine)
+    yield
 
 app = FastAPI()
 

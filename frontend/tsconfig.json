@@ -11,7 +11,7 @@
     "target": "ESnext",
     "lib": ["ESnext", "DOM.Iterable", "DOM"],
     "skipLibCheck": true,
-    // "types": ["node"],
+    "types": ["vite/client"],
     // and npm install -D @types/node
 
     // Style Options

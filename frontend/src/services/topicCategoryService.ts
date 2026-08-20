@@ -1,10 +1,10 @@
 import { TopicCategory } from '@/types'
+import { API_URL } from '@/config'
 
 
-const API_URL = "http://localhost:8000"
 export async function getAllTopicCategories(): Promise<TopicCategory[]> {
     const response = await fetch(`${API_URL}/topic-categories`)
-    if(!response.ok){
+    if (!response.ok){
         throw new Error(`Failed to fetch topic categories: ${response.statusText}`)
     }
     const topicCategories = await response.json()

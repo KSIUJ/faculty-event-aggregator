@@ -1,52 +1,97 @@
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, status
+from sqlalchemy.orm import Session
 
+from database import get_db
 from schemas import (
+    CreateEvent,
     EventListResponse,
     EventResponse,
-    CreateEvent,  
-    UpdateEvent   
+    UpdateEvent,
 )
-from services.event_service import (
-    get_all_events,
-    get_event_by_id,
-    create_event, 
-    update_event, 
-    delete_event  
+from services import event_service
+from services.exceptions import RelatedResourceNotFoundError, ServiceValidationError
+
+router = APIRouter(
+    prefix="/events", 
+    tags=["Events"],
 )
-router = APIRouter(prefix="/events", tags=["Events"])
 
 
+# GET /events
 @router.get("", response_model=list[EventListResponse])
-def read_events():
-    return get_all_events()
+def read_events(db: Session = Depends(get_db)):
+    return event_service.get_all_events(db)
 
 
+# GET /events/{id}
 @router.get("/{event_id}", response_model=EventResponse)
-def read_event(event_id: int):
-    event = get_event_by_id(event_id)
+def read_event(event_id: int, db: Session = Depends(get_db)):
+    event = event_service.get_event_by_id(db, event_id)
 
     if event is None:
         raise HTTPException(
-            status_code=404,
+            status_code=status.HTTP_404_NOT_FOUND,
             detail="Event not found",
         )
 
     return event
 
-@router.post("", response_model=EventResponse, status_code=201)
-def create_event_response(event: CreateEvent):
-    return create_event(event)
 
-@router.patch("/{event_id}", response_model=EventResponse )
-def modify_event(event_id: int, event: UpdateEvent): 
-    updated_event = update_event(event_id, event)
-    if not updated_event:
-        raise HTTPException(status_code=404, detail="Event not found")
+# POST /events
+@router.post("", response_model=EventResponse, status_code=status.HTTP_201_CREATED)
+def add_event(payload: CreateEvent, db: Session = Depends(get_db)):
+    try:
+        return event_service.create_event(db, payload)
+    except RelatedResourceNotFoundError as exc:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=str(exc),
+        ) from exc
+    except ServiceValidationError as exc:
+        raise HTTPException(
+            status_code=status.HTTP_422_UNPROCESSABLE_CONTENT,
+            detail=str(exc),
+        ) from exc
+
+
+# PATCH /events/{id}
+@router.patch("/{event_id}", response_model=EventResponse)
+def modify_event(event_id: int, payload: UpdateEvent, db: Session = Depends(get_db)):
+    try:
+        updated_event = event_service.update_event(
+            db,
+            event_id,
+            payload,
+        )
+    except RelatedResourceNotFoundError as exc:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=str(exc),
+        ) from exc
+    except ServiceValidationError as exc:
+        raise HTTPException(
+            status_code=status.HTTP_422_UNPROCESSABLE_CONTENT,
+            detail=str(exc),
+        ) from exc
+
+    if updated_event is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Event not found",
+        )
+
     return updated_event
 
-@router.delete("/{event_id}",status_code=204)
-def remove_event(event_id: int):
-    success = delete_event(event_id)
-    if not success:
-        raise HTTPException(status_code=404, detail="Event not found")
+
+# DELETE /events/{id}
+@router.delete("/{event_id}", status_code=status.HTTP_204_NO_CONTENT)
+def remove_event(event_id: int, db: Session = Depends(get_db)):
+    deleted = event_service.delete_event(db, event_id)
+
+    if not deleted:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Event not found",
+        )
+
     return None

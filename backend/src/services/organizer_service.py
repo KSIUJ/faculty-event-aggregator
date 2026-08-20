@@ -1,58 +1,49 @@
-from mock_data.organizers import ORGANIZERS
-from datetime import datetime, timezone
+from sqlalchemy import select
+from sqlalchemy.orm import Session
+
+from models import Organizer
 from schemas import CreateOrganizer, UpdateOrganizer
-
-def get_all_organizers():
-    return ORGANIZERS
+from database import commit, commit_and_refresh
 
 
-def get_organizer_by_id(organizer_id: int):
-    return next(
-        (organizer for organizer in ORGANIZERS if organizer["id"] == organizer_id),
-        None,
-    )
+# GET /organizers
+def get_all_organizers(db: Session) -> list[Organizer]:
+    statement = select(Organizer).order_by(Organizer.id)
+    return list(db.scalars(statement).all())
 
 
-def create_organizer(organizer: CreateOrganizer):
-    new_id = max(c["id"] for c in ORGANIZERS) + 1 if ORGANIZERS else 1
-    
-    new_organizer = {
-        "id": new_id,
-        "name": organizer.name,
-        "type": organizer.type,
-        "logo_url": organizer.logo_url,
-        "website_url": organizer.website_url,
-        "description": organizer.description,
-    }
-    
-    ORGANIZERS.append(new_organizer)
-    return new_organizer
-    
-def update_organizer(organizer_id: int, organizer: UpdateOrganizer):
-    existing_organizer = next(
-        (c for c in ORGANIZERS if c["id"] == organizer_id), None
-    )
-    if not existing_organizer:
+# GET /organizers/{id}
+def get_organizer_by_id(db: Session, organizer_id: int) -> Organizer | None:
+    return db.get(Organizer, organizer_id)
+
+
+# POST /organizers
+def create_organizer(db: Session, payload: CreateOrganizer) -> Organizer:
+    organizer = Organizer(**payload.model_dump())
+    db.add(organizer)
+    return commit_and_refresh(db, organizer)
+
+
+# PATCH /organizers/{id}
+def update_organizer(db: Session, organizer_id: int, payload: UpdateOrganizer) -> Organizer | None:
+    organizer = db.get(Organizer, organizer_id)
+
+    if organizer is None:
         return None
 
-    if organizer.name is not None:
-        existing_organizer["name"] = organizer.name
-    if organizer.type is not None:
-        existing_organizer["type"] = organizer.type
-    if organizer.logo_url is not None:
-        existing_organizer["logo_url"] = organizer.logo_url
-    if organizer.website_url is not None:
-        existing_organizer["website_url"] = organizer.website_url
-    if organizer.description is not None:
-        existing_organizer["description"] = organizer.description
+    for field, value in payload.model_dump(exclude_unset=True).items():
+        setattr(organizer, field, value)
 
-    return existing_organizer
+    return commit_and_refresh(db, organizer)
 
-def delete_organizer(organizer_id: int):
-    existing_organizer = next(
-        (c for c in ORGANIZERS if c["id"] == organizer_id), None
-    )
-    if not existing_organizer:
+
+# DELETE /organizers/{id}
+def delete_organizer(db: Session, organizer_id: int) -> bool:
+    organizer = db.get(Organizer, organizer_id)
+
+    if organizer is None:
         return False
-    ORGANIZERS.remove(existing_organizer)
+
+    db.delete(organizer)
+    commit(db)
     return True

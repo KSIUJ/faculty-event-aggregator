@@ -1,52 +1,49 @@
-from mock_data.topic_categories import TOPIC_CATEGORIES
+from sqlalchemy import select
+from sqlalchemy.orm import Session
+
+from models import TopicCategory
 from schemas import CreateTopicCategory, UpdateTopicCategory
-
-def get_all_topic_categories():
-    return TOPIC_CATEGORIES
+from database import commit, commit_and_refresh
 
 
-def get_topic_category_by_id(topic_category_id: int):
-    return next(
-        (
-            topic_category
-            for topic_category in TOPIC_CATEGORIES
-            if topic_category["id"] == topic_category_id
-        ),
-        None,
-    )
+# GET /topic-categories
+def get_all_topic_categories(db: Session) -> list[TopicCategory]:
+    statement = select(TopicCategory).order_by(TopicCategory.id)
+    return list(db.scalars(statement).all())
 
-def create_topic_category(topic_category: CreateTopicCategory):
-    new_id = max(c["id"] for c in TOPIC_CATEGORIES) + 1 if TOPIC_CATEGORIES else 1
 
-    new_topic_category = {
-        "id": new_id,
-        "title": topic_category.title,
-        "icon_name": topic_category.icon_name,
-    }
-    TOPIC_CATEGORIES.append(new_topic_category)
-    return new_topic_category
+# GET /topic-categories/{id}
+def get_topic_category_by_id(db: Session, topic_category_id: int) -> TopicCategory | None:
+    return db.get(TopicCategory, topic_category_id)
 
-def update_topic_category(topic_category_id: int, topic_category:  UpdateTopicCategory):
-    existing_topic_category = next(
-        (c for c in TOPIC_CATEGORIES if c["id"] == topic_category_id), None
-    )
-    if not existing_topic_category:
+
+# POST /topic-categories
+def create_topic_category(db: Session, payload: CreateTopicCategory) -> TopicCategory:
+    topic_category = TopicCategory(**payload.model_dump())
+    db.add(topic_category)
+    return commit_and_refresh(db, topic_category)
+
+
+# PATCH /topic-categories/{id}
+def update_topic_category(db: Session, topic_category_id: int, payload: UpdateTopicCategory) -> TopicCategory | None:
+    topic_category = db.get(TopicCategory, topic_category_id)
+
+    if topic_category is None:
         return None
 
-    if topic_category.title is not None:
-        existing_topic_category["title"] = topic_category.title
-    
-    if topic_category.icon_name is not None:
-        existing_topic_category["icon_name"] = topic_category.icon_name
+    for field, value in payload.model_dump(exclude_unset=True).items():
+        setattr(topic_category, field, value)
 
-    return existing_topic_category
+    return commit_and_refresh(db, topic_category)
 
-def delete_topic_category(topic_category_id: int):
-    existing_topic_category = next(
-        (c for c in TOPIC_CATEGORIES if c["id"] == topic_category_id), None
-    )
-    if not existing_topic_category:
+
+# DELETE /topic-categories/{id}
+def delete_topic_category(db: Session, topic_category_id: int) -> bool:
+    topic_category = db.get(TopicCategory, topic_category_id)
+
+    if topic_category is None:
         return False
-    
-    TOPIC_CATEGORIES.remove(existing_topic_category)
+
+    db.delete(topic_category)
+    commit(db)
     return True
