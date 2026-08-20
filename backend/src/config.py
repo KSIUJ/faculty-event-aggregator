@@ -2,10 +2,10 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
 class Settings(BaseSettings):
-    DB_USER: str
-    DB_PASS: str
-    DB_NAME: str
-    DB_PORT: int
+    DB_USER: str = "dev_user"
+    DB_PASS: str = "dev_password"
+    DB_NAME: str = "local_database"
+    DB_PORT: int = 5432
     DB_HOST: str = "localhost"
     CORS_ORIGINS: str = "http://localhost:5173,http://127.0.0.1:5173"
 
