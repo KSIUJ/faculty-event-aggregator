@@ -1,7 +1,7 @@
 import sys
+from contextlib import asynccontextmanager
 from pathlib import Path
 
-# Add src directory to sys.path so tests can import application modules directly
 src_dir = Path(__file__).resolve().parent.parent / "src"
 if str(src_dir) not in sys.path:
     sys.path.insert(0, str(src_dir))
@@ -15,6 +15,15 @@ from sqlalchemy.pool import StaticPool
 from database import get_db
 from main import app
 from models import Base
+
+
+@asynccontextmanager
+async def noop_lifespan(_app):
+    """Avoid the production database initialization during test startup."""
+    yield
+
+
+app.router.lifespan_context = noop_lifespan
 
 # In-memory SQLite database dedicated for tests
 SQLALCHEMY_DATABASE_URL = "sqlite:///:memory:"
