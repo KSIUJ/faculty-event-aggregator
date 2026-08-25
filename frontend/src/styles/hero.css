@@ -1,0 +1,58 @@
+.hero-banner {
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 2rem;
+    min-height: 16.2rem;
+    padding: 2.25rem 1.4rem 2rem;
+    border: 2px solid var(--paper);
+    background-color: var(--blue-deep);
+}
+
+.hero-banner__copy { max-width: 44rem; }
+
+.hero-banner .eyebrow {
+    font-family: var(--spleen);
+    font-size: 0.99rem;
+    letter-spacing: 0.06em;
+}
+
+.hero-banner h1 {
+    max-width: 43rem;
+    margin: 1rem 0 0.9rem;
+    color: var(--ink);
+    font: 400 clamp(2.6rem, 6.8vw, 5rem)/0.92 var(--display);
+    letter-spacing: -0.02em;
+}
+
+.hero-banner__lede {
+    max-width: 38rem;
+    margin: 0;
+    color: var(--ink);
+    font-size: clamp(1rem, 1.7vw, 1.18rem);
+    line-height: 1.35;
+}
+
+.date-badge {
+    display: grid;
+    flex: 0 0 8.8rem;
+    min-height: 7.1rem;
+    align-content: center;
+    border: 3px solid var(--paper);
+    outline: 2px solid var(--charcoal);
+    outline-offset: -7px;
+    padding: 1rem;
+    background: var(--charcoal);
+    text-transform: uppercase;
+}
+
+.date-badge span {
+    margin-bottom: 0.45rem;
+    color: var(--ink-muted);
+    font: 700 0.7rem var(--mono);
+    letter-spacing: 0.08em;
+}
+
+.date-badge strong { font: 400 1.55rem/1 var(--display); }

@@ -1,0 +1,65 @@
+.app-shell {
+    position: relative;
+    z-index: 0;
+    width: min(100% - 2rem, 1120px);
+    margin: 2rem auto 0;
+    border: 3px solid var(--paper);
+    background: var(--charcoal);
+    box-shadow: 10px 10px 0 var(--paper);
+}
+
+.app-shell--message {
+    min-height: 16rem;
+    padding: 2rem;
+}
+
+.app-shell--message h1 {
+    margin: 1rem 0 0.7rem;
+    font: 400 clamp(2rem, 5vw, 4rem)/0.95 var(--display);
+}
+
+.app-shell--message p:last-child { color: var(--ink-muted); }
+
+.agenda-layout {
+    display: grid;
+    grid-template-columns: minmax(14rem, 28%) 1fr;
+    min-height: 41rem;
+    border-top: 3px solid var(--paper);
+}
+
+.events-panel { display: flex; min-width: 0; flex-direction: column; padding: 1.45rem 1.1rem 1.4rem; }
+
+.site-footer {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+    align-items: center;
+    gap: 1rem;
+    padding: 1.15rem 1rem 2rem;
+    color: var(--ink-muted);
+    font: 0.7rem var(--spleen);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+}
+
+.site-footer > span:last-child { justify-self: end; text-align: right; }
+
+.site-footer__github {
+    display: inline-flex;
+    flex: 0 0 auto;
+    align-items: center;
+    gap: 0.45rem;
+    color: var(--paper);
+    text-decoration: none;
+    transition: color 120ms ease, transform 120ms ease;
+}
+
+.site-footer__github img {
+    width: 1em;
+    height: 1em;
+    flex: 0 0 1em;
+    object-fit: contain;
+    image-rendering: pixelated;
+}
+
+.site-footer__github:hover { color: var(--orange); transform: translateY(-2px); }
+.site-footer__github:focus-visible { outline: 3px solid var(--blue); outline-offset: 4px; }
