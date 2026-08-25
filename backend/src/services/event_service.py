@@ -33,6 +33,12 @@ def _validate_event_times(
         raise ServiceValidationError("end_time cannot be earlier than start_time.")
 
 
+def _validate_future_start(start_time: datetime | None) -> None:
+    st = _normalize_datetime(start_time)
+    if st is not None and st <= datetime.now(timezone.utc):
+        raise ServiceValidationError("start_time must be in the future.")
+
+
 def _validate_relations(
     db: Session,
     event_category_id: int | None = None,
@@ -103,6 +109,7 @@ def get_event_by_id(db: Session, event_id: int) -> Event | None:
 
 # POST /events
 def create_event(db: Session, payload: CreateEvent) -> Event:
+    _validate_future_start(payload.start_time)
     _validate_event_times(payload.start_time, payload.end_time)
     _, _, topic_categories = _validate_relations(
         db,
@@ -136,6 +143,8 @@ def update_event(db: Session, event_id: int, payload: UpdateEvent) -> Event | No
 
     new_start = update_data.get("start_time", event.start_time)
     new_end = update_data.get("end_time", event.end_time)
+    if "start_time" in update_data:
+        _validate_future_start(new_start)
     _validate_event_times(new_start, new_end)
 
     event_category_id = update_data.get("event_category_id")
