@@ -7,6 +7,58 @@ def test_get_events_empty(client: TestClient):
     assert res.json() == []
 
 
+def test_calendar_feed_is_generated_from_current_database(client: TestClient):
+    cat = client.post("/event-categories", json={"title": "Conference"}).json()
+    org = client.post("/organizers", json={"name": "KSI UJ", "type": "ORGANIZATION"}).json()
+    topic = client.post("/topic-categories", json={"title": "AI"}).json()
+    created = client.post("/events", json={
+        "title": "Badania, rozwój; praktyka",
+        "description": "Pierwsza linia\nDruga linia",
+        "location": "Sala 1; Kampus",
+        "start_time": "2026-10-15T10:00:00Z",
+        "end_time": "2026-10-15T12:00:00Z",
+        "event_category_id": cat["id"],
+        "organizer_id": org["id"],
+        "topic_category_ids": [topic["id"]],
+    }).json()
+
+    feed = client.get("/events/calendar.ics")
+    assert feed.status_code == 200
+    assert feed.headers["content-type"].startswith("text/calendar")
+    assert feed.headers["content-disposition"] == 'inline; filename="wydzial-wydarzenia.ics"'
+    assert "BEGIN:VCALENDAR" in feed.text
+    assert f"UID:event-{created['id']}@faculty-event-aggregator" in feed.text
+    assert "DTSTART:20261015T100000Z" in feed.text
+    assert "SUMMARY:Badania\\, rozwój\\; praktyka" in feed.text
+    assert "DESCRIPTION:Pierwsza linia\\nDruga linia" in feed.text
+
+    deleted = client.delete(f"/events/{created['id']}")
+    assert deleted.status_code == 204
+    assert f"UID:event-{created['id']}@faculty-event-aggregator" not in client.get("/events/calendar.ics").text
+
+
+def test_single_event_calendar_and_missing_event(client: TestClient):
+    cat = client.post("/event-categories", json={"title": "Seminar"}).json()
+    org = client.post("/organizers", json={"name": "Wydział", "type": "ORGANIZATION"}).json()
+    created = client.post("/events", json={
+        "title": "Seminarium badawcze",
+        "start_time": "2026-11-01T18:00:00Z",
+        "event_category_id": cat["id"],
+        "organizer_id": org["id"],
+        "topic_category_ids": [],
+    }).json()
+
+    calendar = client.get(f"/events/{created['id']}/calendar.ics")
+    assert calendar.status_code == 200
+    assert calendar.headers["content-disposition"] == f'inline; filename="wydarzenie-{created["id"]}.ics"'
+    assert "DTSTART:20261101T180000Z" in calendar.text
+    assert "DTEND:20261101T190000Z" in calendar.text
+    assert "SUMMARY:Seminarium badawcze" in calendar.text
+
+    missing = client.get("/events/999/calendar.ics")
+    assert missing.status_code == 404
+
+
 def test_create_event_success_and_read(client: TestClient):
     cat = client.post("/event-categories", json={"title": "Conference", "icon_name": "mic"}).json()
     org = client.post("/organizers", json={"name": "UJ Faculty", "type": "ORGANIZATION"}).json()
@@ -42,6 +94,7 @@ def test_create_event_success_and_read(client: TestClient):
     events = list_res.json()
     assert len(events) == 1
     assert events[0]["id"] == event_id
+    assert events[0]["description"] == "Annual technological summit"
 
     # GET /events/{id} (full detail)
     detail_res = client.get(f"/events/{event_id}")
@@ -50,7 +103,7 @@ def test_create_event_success_and_read(client: TestClient):
 
 
 def test_create_event_minimal(client: TestClient):
-    cat = client.post("/event-categories", json={"title": "Meetup"}).json()
+    cat = client.post("/event-categories", json={"title": "Lecture"}).json()
     org = client.post("/organizers", json={"name": "John Doe", "type": "PERSON"}).json()
     top = client.post("/topic-categories", json={"title": "Python"}).json()
 
@@ -104,7 +157,7 @@ def test_create_event_foreign_key_validations(client: TestClient):
 
 
 def test_create_event_time_range_validation(client: TestClient):
-    cat = client.post("/event-categories", json={"title": "Webinar"}).json()
+    cat = client.post("/event-categories", json={"title": "Lecture"}).json()
     org = client.post("/organizers", json={"name": "Org", "type": "ORGANIZATION"}).json()
     top = client.post("/topic-categories", json={"title": "Cloud"}).json()
 
@@ -122,6 +175,22 @@ def test_create_event_time_range_validation(client: TestClient):
     assert "end_time cannot be earlier than start_time" in res.json()["detail"]
 
 
+def test_create_event_rejects_past_start_time(client: TestClient):
+    cat = client.post("/event-categories", json={"title": "Seminar"}).json()
+    org = client.post("/organizers", json={"name": "Wydział", "type": "ORGANIZATION"}).json()
+
+    response = client.post("/events", json={
+        "title": "Archiwalne wydarzenie",
+        "start_time": "1999-01-10T09:10:00Z",
+        "event_category_id": cat["id"],
+        "organizer_id": org["id"],
+        "topic_category_ids": [],
+    })
+
+    assert response.status_code == 422
+    assert response.json()["detail"] == "start_time must be in the future."
+
+
 def test_get_event_not_found(client: TestClient):
     res = client.get("/events/999")
     assert res.status_code == 404
@@ -129,8 +198,8 @@ def test_get_event_not_found(client: TestClient):
 
 
 def test_patch_event_and_associations(client: TestClient):
-    cat1 = client.post("/event-categories", json={"title": "Category 1"}).json()
-    cat2 = client.post("/event-categories", json={"title": "Category 2"}).json()
+    cat1 = client.post("/event-categories", json={"title": "Lecture"}).json()
+    cat2 = client.post("/event-categories", json={"title": "Workshop"}).json()
     org1 = client.post("/organizers", json={"name": "Org 1", "type": "ORGANIZATION"}).json()
     org2 = client.post("/organizers", json={"name": "Org 2", "type": "ORGANIZATION"}).json()
     top1 = client.post("/topic-categories", json={"title": "Topic 1"}).json()
@@ -169,7 +238,7 @@ def test_patch_event_not_found(client: TestClient):
 
 
 def test_patch_event_invalid_foreign_key(client: TestClient):
-    cat = client.post("/event-categories", json={"title": "Cat"}).json()
+    cat = client.post("/event-categories", json={"title": "Lecture"}).json()
     org = client.post("/organizers", json={"name": "Org", "type": "ORGANIZATION"}).json()
     top = client.post("/topic-categories", json={"title": "Top"}).json()
 
@@ -186,7 +255,7 @@ def test_patch_event_invalid_foreign_key(client: TestClient):
 
 
 def test_patch_event_invalid_time_range(client: TestClient):
-    cat = client.post("/event-categories", json={"title": "Cat"}).json()
+    cat = client.post("/event-categories", json={"title": "Lecture"}).json()
     org = client.post("/organizers", json={"name": "Org", "type": "ORGANIZATION"}).json()
     top = client.post("/topic-categories", json={"title": "Top"}).json()
 
@@ -205,7 +274,7 @@ def test_patch_event_invalid_time_range(client: TestClient):
 
 
 def test_delete_event(client: TestClient):
-    cat = client.post("/event-categories", json={"title": "Cat"}).json()
+    cat = client.post("/event-categories", json={"title": "Lecture"}).json()
     org = client.post("/organizers", json={"name": "Org", "type": "ORGANIZATION"}).json()
     top = client.post("/topic-categories", json={"title": "Top"}).json()
 
