@@ -6,7 +6,7 @@
       "type": "ORGANIZATION", 
       "logo_url": "https://ui-avatars.com/api/?name=pendulum&background=random", 
       "website_url": "https://ai.wydzial.edu.pl",
-      "description": "Studenckie koło naukowe zrzeszające pasjonatów do tworzenia wynalazkow."
+      "description": "Studenckie koło naukowe zrzeszające osoby zainteresowane projektowaniem i budową urządzeń."
     },
     { 
       "id": 2, 
@@ -27,44 +27,46 @@
   ],
   "topic_categories": [
     { "id": 1, "title": "Programowanie", "icon_name": "💻" },
-    { "id": 2, "title": "Sztuczna Inteligencja", "icon_name": "🤖" },
-    { "id": 3, "title": "Rocket Science", "icon_name": "🚀" }
+    { "id": 2, "title": "Sztuczna inteligencja", "icon_name": "🤖" },
+    { "id": 3, "title": "Technologie kosmiczne", "icon_name": "🚀" }
   ],
   "event_categories": [
     { "id": 1, "title": "Wykład", "icon_name": "🎤" },
-    { "id": 2, "title": "Warsztaty Praktyczne", "icon_name": "🛠️" },
-    { "id": 3, "title": "Networking", "icon_name": "🤝" }
+    { "id": 2, "title": "Warsztaty", "icon_name": "🛠️" },
+    { "id": 3, "title": "Spotkanie branżowe", "icon_name": "🤝" },
+    { "id": 4, "title": "Konferencja", "icon_name": "🎓" },
+    { "id": 5, "title": "Seminarium", "icon_name": "📚" }
   ],
   "events": [
     {
       "id": 1,
-      "title": "Wstęp do Sieci Neuronowych: Od teorii do praktyki",
-      "description": "Zastanawiasz się jak działają modele LLM?",
+      "title": "Wprowadzenie do sieci neuronowych: od teorii do praktyki",
+      "description": "Wykład wprowadzający do zasad działania sieci neuronowych oraz współczesnych modeli językowych.",
       "location": "Aula Główna 0080",
-      "start_time": "2026-09-15T17:00:00",
-      "end_time": "2026-09-15T19:00:00",
+      "start_time": "2026-09-15T17:00:00+02:00",
+      "end_time": "2026-09-15T19:00:00+02:00",
       "topic_category_id": 2,
       "event_category_id": 1,
       "organizer_id": 1
     },
     {
       "id": 2,
-      "title": "Warsztaty: Czysty kod w projektach zespołowych",
+      "title": "Warsztaty: czysty kod w projektach zespołowych",
       "description": "Praktyczne warsztaty z refaktoryzacji, pisania testów jednostkowych i pracy z Git.",
       "location": "Laboratorium 369",
-      "start_time": "2026-09-18T14:00:00",
-      "end_time": "2026-09-18T17:00:00",
+      "start_time": "2026-09-18T14:00:00+02:00",
+      "end_time": "2026-09-18T17:00:00+02:00",
       "topic_category_id": 1,
       "event_category_id": 2,
       "organizer_id": 3
     },
     {
       "id": 3,
-      "title": "Targi Pracy",
-      "description": "Porozmawiaj z rekruterami z wielu topowych firm. Dowiedz się jakich umiejętności szukają pracodawcy.",
+      "title": "Targi pracy",
+      "description": "Spotkanie z przedstawicielami firm poświęcone wymaganiom rynku pracy oraz oczekiwanym kompetencjom kandydatów.",
       "location": "Sala 0089",
-      "start_time": "2026-10-05T09:00:00",
-      "end_time": "2026-10-05T15:00:00",
+      "start_time": "2026-10-05T09:00:00+02:00",
+      "end_time": "2026-10-05T15:00:00+02:00",
       "topic_category_id": 3,
       "event_category_id": 3,
       "organizer_id": 2
