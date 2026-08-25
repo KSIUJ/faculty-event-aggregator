@@ -1,4 +1,4 @@
-export type { Event, EventList, EventFilterParams } from './event'
+export type { CreateEventPayload, Event, EventList, EventFilterParams } from './event'
 export type { EventCategory, EventCategoryIcon } from './eventCategory'
 export type { TopicCategory, TopicCategoryIcon } from './topicCategory'
 export type { Organizer, OrganizerType } from './organizer'
