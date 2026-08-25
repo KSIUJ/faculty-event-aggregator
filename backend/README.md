@@ -42,6 +42,14 @@ This starts a PostgreSQL 15 instance with the following defaults:
 - Password: `dev_password`
 - Database: `local_database`
 
+When the application starts for the first time, it imports the organizers,
+categories, and events from the file configured by `SAMPLE_DATA_PATH` in
+`.env` (by default `../docs/sampledata.json`). Existing records are preserved
+and matching sample records are not duplicated. A database marker ensures that
+the import is performed only once, so events added or deleted through the API
+remain changed after an application restart. The PostgreSQL volume stores the
+data.
+
 Check that the container is running:
 
 ```bash
