@@ -1,0 +1,28 @@
+@keyframes grid-drift {
+    from { transform: translate3d(-2rem, -2rem, 0); }
+    to { transform: translate3d(0, 0, 0); }
+}
+
+.hero-banner,
+.details-hero {
+    isolation: isolate;
+}
+
+.hero-banner::before,
+.details-hero::before {
+    position: absolute;
+    z-index: 0;
+    inset: -2rem;
+    content: '';
+    pointer-events: none;
+    background-image: linear-gradient(rgba(246, 240, 229, .13) 1px, transparent 1px), linear-gradient(90deg, rgba(246, 240, 229, .13) 1px, transparent 1px);
+    background-size: 2rem 2rem;
+    animation: grid-drift 4s linear infinite;
+    will-change: transform;
+}
+
+.hero-banner > *,
+.details-hero > * {
+    position: relative;
+    z-index: 1;
+}

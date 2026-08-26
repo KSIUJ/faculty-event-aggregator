@@ -20,9 +20,11 @@ If you are developing a production application, we recommend using TypeScript wi
 ## How to run application:
 1. Type in terminal:
    `cd frontend`
-2. Install dependencies:
+2. Create the local environment file:
+   `cp .env.example .env`
+3. Install dependencies:
    `nvm install 22`
-3. Run by typing:
+4. Run by typing:
    `nvm use 22`
    `npm install`
    `npm run dev`

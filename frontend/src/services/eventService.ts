@@ -1,4 +1,4 @@
-import type { EventList, Event, EventFilterParams } from '@/types'
+import type { CreateEventPayload, EventList, Event, EventFilterParams } from '@/types'
 import { API_URL } from '@/config'
 
 export async function getAllEvents(params?: EventFilterParams): Promise<EventList[]> {
@@ -26,4 +26,30 @@ export async function getEventById(id: number): Promise<Event | undefined> {
     }
     const event = await response.json()
     return event
+}
+
+export async function createEvent(payload: CreateEventPayload): Promise<Event> {
+    const response = await fetch(`${API_URL}/events`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+    })
+
+    if (!response.ok) {
+        const errorBody = await response.json().catch(() => null) as { detail?: string } | null
+        throw new Error(errorBody?.detail ?? `Failed to create event: ${response.statusText}`)
+    }
+
+    return response.json()
+}
+
+export async function deleteEvent(id: number): Promise<void> {
+    const response = await fetch(`${API_URL}/events/${id}`, {
+        method: 'DELETE',
+    })
+
+    if (!response.ok) {
+        const errorBody = await response.json().catch(() => null) as { detail?: string } | null
+        throw new Error(errorBody?.detail ?? `Nie udało się usunąć wydarzenia: ${response.statusText}`)
+    }
 }

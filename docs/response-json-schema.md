@@ -145,7 +145,7 @@ Example `GET /events/42` response:
 | Field | Type | Nullable | Description |
 |---|---|---:|---|
 | `id` | integer | NO | Event category ID |
-| `title` | string | NO | Category name |
+| `title` | `EventCategoryTitle` | NO | `Lecture`, `Workshop`, `Networking`, `Conference`, or `Seminar` |
 | `icon_name` | string | YES | Frontend icon identifier |
 | `created_at` | ISO 8601 string | NO | Creation date and time |
 
@@ -164,7 +164,7 @@ Example `GET /events/42` response:
 |---|---|---:|---|
 | `id` | integer | NO | Organizer ID |
 | `name` | string | NO | Organizer name |
-| `type` | string | NO | `PERSON` or `ORGANIZATION` |
+| `type` | `OrganizerType` | NO | `PERSON` or `ORGANIZATION` |
 | `logo_url` | string | YES | Logo URL |
 | `website_url` | string | YES | Website URL |
 | `description` | string | YES | Organizer description |

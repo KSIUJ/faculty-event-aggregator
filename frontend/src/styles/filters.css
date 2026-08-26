@@ -1,0 +1,79 @@
+.filter-sidebar {
+    padding: 1.45rem 1.1rem;
+    border-right: 3px solid var(--paper);
+}
+
+.filter-sidebar__heading h2, .events-toolbar h2 {
+    margin: 0.75rem 0 0;
+    font: 400 1.5rem/1 var(--display);
+}
+
+.event-search { margin-top: 1.45rem; }
+
+.event-search > label {
+    display: block;
+    margin-bottom: 0.65rem;
+    color: var(--ink-muted);
+    font: 700 0.78rem var(--sans);
+}
+
+.event-search__control { position: relative; }
+
+.event-search input {
+    width: 100%;
+    border: 2px solid var(--paper);
+    border-radius: 0;
+    padding: 0.78rem 2.35rem 0.78rem 0.7rem;
+    background: transparent;
+    color: var(--ink);
+    font: 0.82rem var(--spleen);
+}
+
+.event-search input::placeholder { color: var(--ink-muted); }
+.event-search input:focus { outline: 3px solid var(--blue); outline-offset: 2px; }
+.event-search input::-webkit-search-cancel-button { appearance: none; }
+
+.event-search button {
+    position: absolute;
+    top: 50%;
+    right: 0.55rem;
+    transform: translateY(-50%);
+    border: 0;
+    padding: 0.15rem 0.3rem;
+    background: transparent;
+    color: var(--ink);
+    font: 1.25rem/1 var(--sans);
+}
+
+.event-search button:hover { color: var(--yellow); }
+
+.filter-group { margin-top: 2.3rem; }
+
+.filter-group h3 {
+    margin: 0 0 0.9rem;
+    color: var(--ink-muted);
+    font: 700 0.78rem var(--sans);
+}
+
+.week-selector, .category-button {
+    width: 100%;
+    border: 2px solid var(--paper);
+    padding: 0.85rem 0.7rem;
+    background: transparent;
+    color: var(--ink);
+    text-align: left;
+}
+
+.week-selector { display: grid; gap: 1rem; }
+.week-selector strong { font: 700 0.82rem var(--mono); }
+.week-selector span { display: flex; justify-content: space-between; font-size: 0.82rem; }
+.week-selector:hover, .week-selector.is-active { background: var(--charcoal-soft); }
+.category-list { display: grid; gap: 0.55rem; }
+.category-button { --category-highlight: var(--blue); font-size: 0.92rem; transition: background-color 120ms ease, color 120ms ease, transform 120ms ease; }
+.category-button--all { --category-highlight: #d8d8d2; }
+.category-button--blue { --category-highlight: var(--blue); }
+.category-button--yellow { --category-highlight: var(--yellow); }
+.category-button--pink { --category-highlight: var(--pink); }
+.category-button--green { --category-highlight: var(--green); }
+.category-button--orange { --category-highlight: var(--orange); }
+.category-button:hover, .category-button.is-active { transform: translateX(3px); background: var(--category-highlight); color: var(--charcoal); }

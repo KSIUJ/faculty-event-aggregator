@@ -48,6 +48,11 @@ def test_create_organizer_validation_error(client: TestClient):
     assert res.status_code == 422
 
 
+def test_create_organizer_rejects_unknown_type(client: TestClient):
+    res = client.post("/organizers", json={"name": "Unknown", "type": "GROUP"})
+    assert res.status_code == 422
+
+
 def test_get_organizer_by_id(client: TestClient):
     created = client.post("/organizers", json={"name": "ACM Chapter", "type": "ORGANIZATION"}).json()
     org_id = created["id"]

@@ -97,3 +97,15 @@ class TopicCategory(Base):
     )
 
     events = relationship("Event", secondary=event_topic_category, back_populates="topic_categories")
+
+
+class SeedHistory(Base):
+    __tablename__ = "seed_history"
+
+    key = Column(String, primary_key=True)
+    created_at = Column(
+        DateTime(timezone=True),
+        nullable=False,
+        default=lambda: datetime.now(timezone.utc),
+        server_default=func.now(),
+    )

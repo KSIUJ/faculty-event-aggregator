@@ -1,6 +1,10 @@
+import hashlib
+
 from fastapi import APIRouter, Depends, HTTPException, Query, status
+from fastapi.responses import Response
 from sqlalchemy.orm import Session
 
+from calendar_feed import build_calendar
 from database import get_db
 from schemas import (
     CreateEvent,
@@ -28,6 +32,46 @@ def read_events(
         db,
         event_category_id=event_category,
         topic_category_id=topic_category
+    )
+
+
+def _calendar_response(content: str, filename: str) -> Response:
+    etag = hashlib.sha256(content.encode("utf-8")).hexdigest()
+    return Response(
+        content=content,
+        media_type="text/calendar; charset=utf-8",
+        headers={
+            "Cache-Control": "no-cache",
+            "Content-Disposition": f'inline; filename="{filename}"',
+            "ETag": f'"{etag}"',
+        },
+    )
+
+
+# GET /events/calendar.ics
+@router.get("/calendar.ics", response_class=Response)
+def read_events_calendar(db: Session = Depends(get_db)):
+    events = event_service.get_all_events(db)
+    return _calendar_response(
+        build_calendar(events),
+        "wydzial-wydarzenia.ics",
+    )
+
+
+# GET /events/{id}/calendar.ics
+@router.get("/{event_id}/calendar.ics", response_class=Response)
+def read_event_calendar(event_id: int, db: Session = Depends(get_db)):
+    event = event_service.get_event_by_id(db, event_id)
+
+    if event is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Event not found",
+        )
+
+    return _calendar_response(
+        build_calendar([event], name=event.title),
+        f"wydarzenie-{event.id}.ics",
     )
 
 # GET /events/{id}

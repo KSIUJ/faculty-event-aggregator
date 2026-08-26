@@ -1,0 +1,96 @@
+.site-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    min-height: 4.8rem;
+    padding: 0.8rem 1.05rem;
+    border-bottom: 3px solid var(--paper);
+    font-family: var(--proto-mono);
+}
+
+.brand-lockup, .site-nav { display: flex; align-items: center; }
+
+.brand-lockup {
+    gap: 0.7rem;
+    font: 700 1.2rem var(--spleen);
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+}
+
+.brand-logo-frame {
+    display: grid;
+    place-items: center;
+    width: 2.7rem;
+    height: 2.7rem;
+    flex: 0 0 2.7rem;
+    overflow: hidden;
+    background: #fff;
+    clip-path: polygon(
+        37.5% 0, 62.5% 0,
+        62.5% 4.167%, 70.833% 4.167%,
+        70.833% 8.333%, 79.167% 8.333%,
+        79.167% 12.5%, 83.333% 12.5%,
+        83.333% 16.667%, 87.5% 16.667%,
+        87.5% 20.833%, 91.667% 20.833%,
+        91.667% 25%, 95.833% 25%,
+        95.833% 33.333%, 100% 33.333%,
+        100% 66.667%, 95.833% 66.667%,
+        95.833% 75%, 91.667% 75%,
+        91.667% 79.167%, 87.5% 79.167%,
+        87.5% 83.333%, 83.333% 83.333%,
+        83.333% 87.5%, 79.167% 87.5%,
+        79.167% 91.667%, 70.833% 91.667%,
+        70.833% 95.833%, 62.5% 95.833%,
+        62.5% 100%, 37.5% 100%,
+        37.5% 95.833%, 29.167% 95.833%,
+        29.167% 91.667%, 20.833% 91.667%,
+        20.833% 87.5%, 16.667% 87.5%,
+        16.667% 83.333%, 12.5% 83.333%,
+        12.5% 79.167%, 8.333% 79.167%,
+        8.333% 75%, 4.167% 75%,
+        4.167% 66.667%, 0 66.667%,
+        0 33.333%, 4.167% 33.333%,
+        4.167% 25%, 8.333% 25%,
+        8.333% 20.833%, 12.5% 20.833%,
+        12.5% 16.667%, 16.667% 16.667%,
+        16.667% 12.5%, 20.833% 12.5%,
+        20.833% 8.333%, 29.167% 8.333%,
+        29.167% 4.167%, 37.5% 4.167%
+    );
+}
+
+.brand-logo {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    image-rendering: pixelated;
+}
+
+.site-nav {
+    gap: 1.05rem;
+    color: var(--ink-muted);
+    font-family: var(--proto-mono);
+    font-size: 0.84rem;
+}
+
+.site-nav .button {
+    font-family: var(--proto-mono);
+}
+
+.site-nav a:hover {
+    color: var(--ink);
+    text-decoration: underline;
+    text-underline-offset: 0.3rem;
+}
+
+.button--yellow {
+    background: var(--yellow);
+    box-shadow: 3px 3px 0 var(--paper);
+}
+
+.button--yellow:hover {
+    transform: translate(-1px, -1px);
+    box-shadow: 4px 4px 0 var(--paper);
+}

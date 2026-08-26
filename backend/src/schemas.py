@@ -1,5 +1,20 @@
 from datetime import datetime
+from enum import StrEnum
+
 from pydantic import BaseModel, ConfigDict
+
+
+class EventCategoryTitle(StrEnum):
+    LECTURE = "Lecture"
+    WORKSHOP = "Workshop"
+    NETWORKING = "Networking"
+    CONFERENCE = "Conference"
+    SEMINAR = "Seminar"
+
+
+class OrganizerType(StrEnum):
+    PERSON = "PERSON"
+    ORGANIZATION = "ORGANIZATION"
 
 
 class BaseResponse(BaseModel):
@@ -8,7 +23,7 @@ class BaseResponse(BaseModel):
 
 class EventCategoryResponse(BaseResponse):
     id: int
-    title: str
+    title: EventCategoryTitle
     icon_name: str | None = None
     created_at: datetime
 
@@ -16,7 +31,7 @@ class EventCategoryResponse(BaseResponse):
 class OrganizerResponse(BaseResponse):
     id: int
     name: str
-    type: str
+    type: OrganizerType
     logo_url: str | None = None
     website_url: str | None = None
     description: str | None = None
@@ -33,6 +48,7 @@ class TopicCategoryResponse(BaseResponse):
 class EventListResponse(BaseResponse):
     id: int
     title: str
+    description: str | None = None
     location: str | None = None
     start_time: datetime
     end_time: datetime | None = None
@@ -44,24 +60,24 @@ class EventListResponse(BaseResponse):
 
 
 class EventResponse(EventListResponse):
-    description: str | None = None
+    pass
 
 
 # REQUEST SCHEMAS
 
 class CreateEventCategory(BaseModel):
-    title: str
+    title: EventCategoryTitle
     icon_name: str | None = None
 
 
 class UpdateEventCategory(BaseModel):
-    title: str | None = None
+    title: EventCategoryTitle | None = None
     icon_name: str | None = None
 
 
 class CreateOrganizer(BaseModel):
     name: str
-    type: str
+    type: OrganizerType
     logo_url: str | None = None
     website_url: str | None = None
     description: str | None = None
@@ -69,7 +85,7 @@ class CreateOrganizer(BaseModel):
 
 class UpdateOrganizer(BaseModel):
     name: str | None = None
-    type: str | None = None
+    type: OrganizerType | None = None
     logo_url: str | None = None
     website_url: str | None = None
     description: str | None = None

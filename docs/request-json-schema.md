@@ -27,7 +27,7 @@
 | :--- | :--- | :--- | :--- | :--- |
 | `title` | string | NO | NO | Event title |
 | `location` | string | NO | YES | Event location |
-| `start_time` | ISO 8601 string | NO | NO | Start date and time |
+| `start_time` | ISO 8601 string | NO | NO | Start date and time; must be in the future |
 | `end_time` | ISO 8601 string | NO | YES | End date and time |
 | `event_category_id` | integer | NO | NO | Event category id |
 | `organizer_id` | integer | NO | NO | Event organizer id |
@@ -74,7 +74,7 @@ Example `PATCH /events/{id}` request(Change title and event duration):
 
 | Field | Type | Optional | Nullable | Description |
 | :--- | :--- | :--- | :--- | :--- |
-| `title` | string | NO | NO | Category name |
+| `title` | `EventCategoryTitle` | NO | NO | `Lecture`, `Workshop`, `Networking`, `Conference`, or `Seminar` |
 | `icon_name` | string | NO | YES | Frontend icon identifier |
 
 Example `POST /event-categories`
@@ -90,14 +90,14 @@ Example `POST /event-categories`
 
 | Field | Type | Optional | Nullable | Description |
 | :--- | :--- | :--- | :--- | :--- |
-| `title` | string | YES | NO | Category name |
+| `title` | `EventCategoryTitle` | YES | NO | `Lecture`, `Workshop`, `Networking`, `Conference`, or `Seminar` |
 | `icon_name` | string | YES | YES | Frontend icon identifier |
 
 Example `PATCH /event-categories/{id}` request (updating only the title):
 
 ```json
 {
-    "title": "IT Conference"
+    "title": "Conference"
 }
 ```
 
@@ -137,7 +137,7 @@ Example `PATCH /topic-categories/{id}` request (updating icon name):
 | Field | Type | Optional | Nullable | Description |
 | :--- | :--- | :--- | :--- | :--- |
 | `name` | string | NO | NO | Organizer name |
-| `type` | string | NO | NO | `PERSON` or `ORGANIZATION` |
+| `type` | `OrganizerType` | NO | NO | `PERSON` or `ORGANIZATION` |
 | `logo_url` | string | NO | YES | Logo URL |
 | `website_url` | string | NO | YES | Website URL |
 | `description` | string | NO | YES | Organizer description |
@@ -159,7 +159,7 @@ Example `POST /organizers`
 | Field | Type | Optional | Nullable | Description |
 | :--- | :--- | :--- | :--- | :--- |
 | `name` | string | YES | NO | Organizer name |
-| `type` | string | YES | NO | `PERSON` or `ORGANIZATION` |
+| `type` | `OrganizerType` | YES | NO | `PERSON` or `ORGANIZATION` |
 | `logo_url` | string | YES | YES | Logo URL |
 | `website_url` | string | YES | YES | Website URL |
 | `description` | string | YES | YES | Organizer description |

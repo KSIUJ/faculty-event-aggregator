@@ -1,0 +1,37 @@
+* { box-sizing: border-box; }
+
+html { background: #090909; scroll-behavior: smooth; }
+
+body {
+    min-width: 320px;
+    margin: 0;
+    background: #090909;
+    color: var(--ink);
+    font-family: var(--sans);
+}
+
+button, a { font: inherit; }
+button { cursor: pointer; }
+a { color: inherit; text-decoration: none; }
+:focus-visible { outline: 3px solid var(--blue); outline-offset: 3px; }
+
+main { padding: 0.15rem; }
+
+.eyebrow {
+    margin: 0;
+    color: var(--ink-muted);
+    font: 700 0.76rem/1.2 var(--mono);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.eyebrow span { color: var(--blue); }
+
+.button {
+    border: 2px solid var(--ink);
+    padding: 0.72rem 0.95rem;
+    color: var(--charcoal);
+    font-weight: 800;
+}
+
+.button:disabled { cursor: wait; opacity: 0.62; }
