@@ -1,99 +1,62 @@
-# How to run the application?
+Faculty Event Aggregator - Backend
 
-## Requirements
+This is the backend API for the Faculty Event Aggregator, built with FastAPI and PostgreSQL.
 
+## ⚙️ Prerequisites
 - Python 3.11+
-- Dependencies listed in `requirements.txt`
+- Docker & Docker Compose (for the database)
 
-Install all dependencies:
+## 🚀 Setup & Run (Step-by-Step)
 
+**1. Create the environment file:**
 ```bash
+cp .env.example .env
+```
+
+**2. Virtual Environment & Dependencies:**
+Create and activate a virtual environment, then install required packages:
+```bash
+python -m venv venv
+source venv/Scripts/activate  # On Windows Git Bash (use 'source venv/bin/activate' on Mac/Linux)
 pip install -r requirements.txt
 ```
 
-How to install python and pip? Go to the website:
-
-```bash
-https://www.python.org/downloads/
-```
-
-When installing python, check the box that installs pip.
-
-## Database with Docker
-
-The PostgreSQL database runs in a Docker container defined in `docker-compose.yml`.
-
-Requirements:
-
-- [Docker](https://docs.docker.com/get-docker/)
-- Docker Compose (bundled with Docker Desktop)
-
-Start the database:
-
+**3. Start the Database:**
+The PostgreSQL 15 database runs in a Docker container defined in `docker-compose.yml`.
 ```bash
 docker compose up -d
 ```
+> **Note:** When starting for the first time, it automatically imports sample data configured by `SAMPLE_DATA_PATH` in `.env`.
 
-This starts a PostgreSQL 15 instance with the following defaults:
-
-- Host: `localhost`
-- Port: `5432`
-- User: `dev_user`
-- Password: `dev_password`
-- Database: `local_database`
-
-When the application starts for the first time, it imports the organizers,
-categories, and events from the file configured by `SAMPLE_DATA_PATH` in
-`.env` (by default `../docs/sampledata.json`). Existing records are preserved
-and matching sample records are not duplicated. A database marker ensures that
-the import is performed only once, so events added or deleted through the API
-remain changed after an application restart. The PostgreSQL volume stores the
-data.
-
-Check that the container is running:
-
-```bash
-docker compose ps
-```
-
-Stop the database:
-
-```bash
-docker compose down
-```
-
-The database data is kept in the `postgres_data` volume, so it persists between restarts. To remove the data as well, run `docker compose down -v`.
-
-## Before first run
-
-Make sure all requirements are installed before starting the application.
-
-Start the database first (see [Database with Docker](#database-with-docker)):
-
-```bash
-docker compose up -d
-```
-
-Run the backend server:
-
+**4. Run the Backend Server:**
+Ensure you are in the main `backend` directory (where the `src` folder is located), then run:
 ```bash
 uvicorn main:app --app-dir src --reload
 ```
 
-The application will start at:
-```bash
-http://127.0.0.1:8000
-```
-API documentation is available at:
+## 🔗 Endpoints
+Once the server is running, you can access the application here:
+- **API Base URL:** http://127.0.0.1:8000
+- **Swagger UI (Docs):** http://127.0.0.1:8000/docs
 
-```bash
-http://127.0.0.1:8000/docs
-```
+## 🐳 Database Details & Useful Commands
 
-## Running Tests
+The `docker-compose up -d` command starts a PostgreSQL 15 instance with the following defaults:
+- **Host:** `localhost`
+- **Port:** `5432`
+- **User:** `dev_user`
+- **Password:** `dev_password`
+- **Database:** `local_database`
+
+The database data is kept in the `postgres_data` volume, so it persists between restarts.
+
+- Check if the container is running: `docker compose ps`
+- Stop the database: `docker compose down`
+- Stop and **remove all data**: `docker compose down -v`
+
+## 🧪 Running Tests
 
 Run the test suite using `pytest` (tests use an in-memory SQLite database and do not require Docker to be running):
-
 ```bash
 pytest tests/ -v
 ```
