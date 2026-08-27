@@ -1,3 +1,5 @@
+import type { AgendaDateRange } from '@/types/agenda'
+
 function positiveNumberFromEnv(value: string | undefined, fallback: number) {
     const parsedValue = Number(value)
     return Number.isFinite(parsedValue) && parsedValue > 0
@@ -115,6 +117,20 @@ export const EVENT_CATEGORY_FILTER_COLOR_CLASSES: Record<EventCategoryKey, strin
     conference: 'category-button--green',
     seminar: 'category-button--orange',
 }
+
+export const DATE_RANGE_OPTIONS: Array<{
+    value: Exclude<AgendaDateRange, 'custom'>
+    label: string
+    description: string
+    icon: string
+}> = [
+    { value: 'today', label: 'Dzisiaj', description: 'Tylko dzisiejsze wydarzenia', icon: '●' },
+    { value: 'tomorrow', label: 'Jutro', description: 'Plan na kolejny dzień', icon: '→' },
+    { value: 'week', label: 'Ten tydzień', description: 'Bieżący tydzień', icon: '▦' },
+    { value: 'next7', label: 'Najbliższe 7 dni', description: 'Od dzisiaj przez tydzień', icon: '7' },
+    { value: 'next30', label: 'Najbliższe 30 dni', description: 'Plan na miesiąc do przodu', icon: '30' },
+    { value: 'upcoming', label: 'Wszystkie nadchodzące', description: 'Bez daty końcowej', icon: '∞' },
+]
 
 export const CREATE_EVENT_STEPS = [
     { shortLabel: 'Podstawy', title: 'Tytuł i opis' },
