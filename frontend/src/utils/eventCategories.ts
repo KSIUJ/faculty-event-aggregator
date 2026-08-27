@@ -1,5 +1,6 @@
 import {
     EVENT_CATEGORY_ALIASES,
+    EVENT_CATEGORY_FILTER_COLOR_CLASSES,
     EVENT_CATEGORY_LABELS,
     type EventCategoryKey,
 } from '@/config'
@@ -22,4 +23,11 @@ export function getEventCategoryKey(title: string): EventCategoryKey | undefined
 export function localizeEventCategory(title: string) {
     const categoryKey = getEventCategoryKey(title)
     return categoryKey ? EVENT_CATEGORY_LABELS[categoryKey] : title
+}
+
+export function getEventCategoryFilterColorClass(title: string) {
+    const categoryKey = getEventCategoryKey(title)
+    return categoryKey
+        ? EVENT_CATEGORY_FILTER_COLOR_CLASSES[categoryKey]
+        : 'category-button--blue'
 }
