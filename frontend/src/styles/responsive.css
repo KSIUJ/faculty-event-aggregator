@@ -7,6 +7,7 @@
     .agenda-layout { grid-template-columns: 1fr; }
     .filter-sidebar { border-right: 0; border-bottom: 3px solid var(--paper); }
     .filter-group { margin-top: 1.4rem; }
+    .date-picker__menu { width: 100%; }
     .category-list { grid-template-columns: repeat(2, 1fr); }
     .wizard-progress__item { padding: .62rem .45rem; }
     .wizard-progress__item strong { font-size: .57rem; }
@@ -15,6 +16,9 @@
 }
 
 @media (max-width: 560px) {
+    .date-range-options { grid-template-columns: 1fr; }
+    .custom-date-range__fields { grid-template-columns: 1fr; }
+    .custom-date-range__fields > span { display: none; }
     .event-card { grid-template-columns: 5rem 1fr auto; gap: 0.7rem; padding: 0.8rem; }
     .event-card__time strong { font-size: 1.08rem; }
     .event-card p { font-size: 0.82rem; }
