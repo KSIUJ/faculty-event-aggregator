@@ -7,6 +7,7 @@ import {
 import type { EventList } from '@/types'
 import { getEventCategoryKey, localizeEventCategory } from '@/utils/eventCategories'
 import { formatEventDate, formatEventDuration, formatEventTime } from '@/utils/eventFormatters'
+import { getEventLifecycleStatus, getEventLifecycleStatusLabel } from '@/utils/eventStatus'
 
 function getCardColor(event: EventList): EventCardColor {
     const categoryKey = getEventCategoryKey(event.event_category.title)
@@ -22,12 +23,15 @@ interface EventCardProps {
 }
 
 export default function EventCard({ event, onOpen }: EventCardProps) {
+    const lifecycleStatus = getEventLifecycleStatus(event)
+    const lifecycleStatusLabel = getEventLifecycleStatusLabel(lifecycleStatus)
+
     return (
         <article
-            className={`event-card event-card--${getCardColor(event)}`}
+            className={`event-card event-card--${getCardColor(event)} event-card--status-${lifecycleStatus}`}
             role="button"
             tabIndex={0}
-            aria-label={`Wyświetl szczegóły wydarzenia: ${event.title}`}
+            aria-label={`Wyświetl szczegóły wydarzenia: ${event.title}. Status: ${lifecycleStatusLabel}`}
             onClick={() => onOpen(event)}
             onKeyDown={(keyboardEvent) => {
                 if (keyboardEvent.key === 'Enter' || keyboardEvent.key === ' ') {
@@ -41,7 +45,12 @@ export default function EventCard({ event, onOpen }: EventCardProps) {
                 <span>{formatEventDuration(event)}</span>
             </div>
             <div className="event-card__content">
-                <div className="event-card__date">{formatEventDate(event.start_time)}</div>
+                <div className="event-card__date-row">
+                    <div className="event-card__date">{formatEventDate(event.start_time)}</div>
+                    <span className={`event-status event-status--${lifecycleStatus}`}>
+                        <span aria-hidden="true" />{lifecycleStatusLabel}
+                    </span>
+                </div>
                 <h3>{event.title}</h3>
                 <p>{event.location ?? 'Miejsce zostanie podane'} · {event.organizer.name}</p>
             </div>
