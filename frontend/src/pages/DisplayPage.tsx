@@ -2,8 +2,8 @@ import { useEffect, useMemo, useState } from 'react'
 import { PROJECT_REPOSITORY_URL, TOAST_DURATION_MS } from '@/config'
 import { deleteEvent, getAllEventCategories, getAllEvents, getAllOrganizers, getAllTopicCategories, getEventById } from '@/services'
 import type { Event, EventCategory, EventList, Organizer, TopicCategory } from '@/types'
-import type { AgendaCategory, AgendaDateRange } from '@/types/agenda'
-import { isInCurrentWeek, isUpcoming } from '@/utils/eventFormatters'
+import type { AgendaCategory, AgendaCustomDateRange, AgendaDateRange } from '@/types/agenda'
+import { isInAgendaDateRange, isUpcoming } from '@/utils/eventFormatters'
 import { eventMatchesSearch } from '@/utils/eventSearch'
 import { CreateEventModal, EventDetailsModal, EventsPanel, FilterSidebar, HeroBanner, SiteHeader } from '@/components/agenda'
 
@@ -19,6 +19,7 @@ export default function DisplayPage() {
     const [error, setError] = useState(false)
     const [activeCategory, setActiveCategory] = useState<AgendaCategory>('all')
     const [dateRange, setDateRange] = useState<AgendaDateRange>('upcoming')
+    const [customDateRange, setCustomDateRange] = useState<AgendaCustomDateRange>({ start: '', end: '' })
     const [searchQuery, setSearchQuery] = useState('')
     const [notice, setNotice] = useState('')
     const [selectedEvent, setSelectedEvent] = useState<Event | null>(null)
@@ -59,9 +60,9 @@ export default function DisplayPage() {
             .filter((event) => isUpcoming(event.start_time))
             .filter((event) => eventMatchesSearch(event, searchQuery))
             .filter((event) => activeCategory === 'all' || event.event_category.id === activeCategory)
-            .filter((event) => dateRange === 'upcoming' || isInCurrentWeek(event.start_time))
+            .filter((event) => isInAgendaDateRange(event.start_time, dateRange, customDateRange))
             .sort((a, b) => new Date(a.start_time).getTime() - new Date(b.start_time).getTime())
-    }, [activeCategory, dateRange, events, searchQuery])
+    }, [activeCategory, customDateRange, dateRange, events, searchQuery])
 
     const showNotice = (message: string) => {
         setNotice(message)
@@ -139,6 +140,8 @@ export default function DisplayPage() {
                         dateRange={dateRange}
                         searchQuery={searchQuery}
                         onCategoryChange={setActiveCategory}
+                        customDateRange={customDateRange}
+                        onCustomDateRangeChange={setCustomDateRange}
                         onDateRangeChange={setDateRange}
                         onSearchChange={setSearchQuery}
                     />
