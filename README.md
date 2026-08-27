@@ -29,7 +29,7 @@ The repository is divided into two main parts. **Please refer to their respectiv
 ### Quick Start
 To get started, clone the repository:
 ```bash
-git clone [https://github.com/KSIUJ/faculty-event-aggregator.git](https://github.com/KSIUJ/faculty-event-aggregator.git)
+git clone https://github.com/KSIUJ/faculty-event-aggregator.git
 cd faculty-event-aggregator
 ```
 *Then follow the instructions in the `/backend` and `/frontend` folders.*
