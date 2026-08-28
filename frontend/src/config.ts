@@ -1,4 +1,4 @@
-import type { AgendaDateRange } from '@/types/agenda'
+import type { AgendaDateRange, AgendaEventStatus, EventLifecycleStatus } from '@/types/agenda'
 
 function positiveNumberFromEnv(value: string | undefined, fallback: number) {
     const parsedValue = Number(value)
@@ -30,6 +30,7 @@ export const TOAST_DURATION_MS = positiveNumberFromEnv(
     import.meta.env.VITE_TOAST_DURATION_MS,
     2800,
 )
+export const EVENT_STATUS_REFRESH_MS = 30 * 1000
 
 export const PROJECT_REPOSITORY_URL =
     import.meta.env.VITE_PROJECT_REPOSITORY_URL ||
@@ -129,8 +130,33 @@ export const DATE_RANGE_OPTIONS: Array<{
     { value: 'week', label: 'Ten tydzień', description: 'Bieżący tydzień', icon: '▦' },
     { value: 'next7', label: 'Najbliższe 7 dni', description: 'Od dzisiaj przez tydzień', icon: '7' },
     { value: 'next30', label: 'Najbliższe 30 dni', description: 'Plan na miesiąc do przodu', icon: '30' },
-    { value: 'upcoming', label: 'Wszystkie nadchodzące', description: 'Bez daty końcowej', icon: '∞' },
+    { value: 'all', label: 'Wszystkie terminy', description: 'Bez ograniczenia daty', icon: '∞' },
 ]
+
+export const EVENT_STATUS_OPTIONS: Array<{
+    value: AgendaEventStatus
+    label: string
+    description: string
+    icon: string
+}> = [
+    { value: 'all', label: 'Wszystkie statusy', description: 'Bez ograniczeń', icon: '◇' },
+    { value: 'not-started', label: 'Nie rozpoczęło się', description: 'Wydarzenia przed startem', icon: '○' },
+    { value: 'ongoing', label: 'Trwa', description: 'Wydarzenia odbywające się teraz', icon: '...' },
+    { value: 'ended', label: 'Zakończone', description: 'Wydarzenia po zakończeniu', icon: '■' },
+]
+
+export const EVENT_STATUS_LABELS: Record<EventLifecycleStatus, string> = {
+    'not-started': 'Nie rozpoczęło się',
+    ongoing: 'Trwa',
+    ended: 'Zakończone',
+}
+
+export const EVENT_STATUS_HEADINGS: Record<AgendaEventStatus, string> = {
+    all: 'Wszystkie wydarzenia',
+    'not-started': 'Nadchodzące wydarzenia',
+    ongoing: 'Trwające wydarzenia',
+    ended: 'Zakończone wydarzenia',
+}
 
 export const CREATE_EVENT_STEPS = [
     { shortLabel: 'Podstawy', title: 'Tytuł i opis' },

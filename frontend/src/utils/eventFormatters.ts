@@ -50,10 +50,6 @@ export function formatWeekRange() {
     return `${start.getDate()}–${end.getDate()} ${month}`
 }
 
-export function isUpcoming(startTime: string) {
-    return new Date(startTime).getTime() >= Date.now()
-}
-
 function startOfDay(date: Date) {
     const result = new Date(date)
     result.setHours(0, 0, 0, 0)
@@ -115,7 +111,7 @@ export function isInAgendaDateRange(
     range: AgendaDateRange,
     customRange: AgendaCustomDateRange,
 ) {
-    if (range === 'upcoming') return true
+    if (range === 'all') return true
 
     const eventDate = new Date(startTime)
     const today = startOfDay(new Date())

@@ -1,10 +1,11 @@
 import { useEffect, useMemo, useState } from 'react'
-import { PROJECT_REPOSITORY_URL, TOAST_DURATION_MS } from '@/config'
+import { EVENT_STATUS_HEADINGS, EVENT_STATUS_REFRESH_MS, PROJECT_REPOSITORY_URL, TOAST_DURATION_MS } from '@/config'
 import { deleteEvent, getAllEventCategories, getAllEvents, getAllOrganizers, getAllTopicCategories, getEventById } from '@/services'
 import type { Event, EventCategory, EventList, Organizer, TopicCategory } from '@/types'
-import type { AgendaCategory, AgendaCustomDateRange, AgendaDateRange } from '@/types/agenda'
-import { isInAgendaDateRange, isUpcoming } from '@/utils/eventFormatters'
+import type { AgendaCategory, AgendaCustomDateRange, AgendaDateRange, AgendaEventStatus } from '@/types/agenda'
+import { isInAgendaDateRange } from '@/utils/eventFormatters'
 import { eventMatchesSearch } from '@/utils/eventSearch'
+import { eventMatchesStatus } from '@/utils/eventStatus'
 import { CreateEventModal, EventDetailsModal, EventsPanel, FilterSidebar, HeroBanner, SiteHeader } from '@/components/agenda'
 
 interface AgendaResources {
@@ -18,8 +19,10 @@ export default function DisplayPage() {
     const [resources, setResources] = useState<AgendaResources>({ categories: [], organizers: [], topics: [] })
     const [error, setError] = useState(false)
     const [activeCategory, setActiveCategory] = useState<AgendaCategory>('all')
-    const [dateRange, setDateRange] = useState<AgendaDateRange>('upcoming')
+    const [dateRange, setDateRange] = useState<AgendaDateRange>('all')
     const [customDateRange, setCustomDateRange] = useState<AgendaCustomDateRange>({ start: '', end: '' })
+    const [eventStatus, setEventStatus] = useState<AgendaEventStatus>('not-started')
+    const [statusClock, setStatusClock] = useState(() => Date.now())
     const [searchQuery, setSearchQuery] = useState('')
     const [notice, setNotice] = useState('')
     const [selectedEvent, setSelectedEvent] = useState<Event | null>(null)
@@ -46,6 +49,11 @@ export default function DisplayPage() {
         loadEvents()
     }, [])
 
+    useEffect(() => {
+        const timer = window.setInterval(() => setStatusClock(Date.now()), EVENT_STATUS_REFRESH_MS)
+        return () => window.clearInterval(timer)
+    }, [])
+
     const categories = useMemo<EventCategory[]>(() => {
         const fallbackCategories = events
             ? [...new Map(events.map((event) => [event.event_category.id, event.event_category])).values()]
@@ -57,12 +65,15 @@ export default function DisplayPage() {
     const visibleEvents = useMemo(() => {
         if (!events) return []
         return events
-            .filter((event) => isUpcoming(event.start_time))
             .filter((event) => eventMatchesSearch(event, searchQuery))
             .filter((event) => activeCategory === 'all' || event.event_category.id === activeCategory)
             .filter((event) => isInAgendaDateRange(event.start_time, dateRange, customDateRange))
-            .sort((a, b) => new Date(a.start_time).getTime() - new Date(b.start_time).getTime())
-    }, [activeCategory, customDateRange, dateRange, events, searchQuery])
+            .filter((event) => eventMatchesStatus(event, eventStatus, statusClock))
+            .sort((a, b) => {
+                const difference = new Date(a.start_time).getTime() - new Date(b.start_time).getTime()
+                return eventStatus === 'ended' ? -difference : difference
+            })
+    }, [activeCategory, customDateRange, dateRange, eventStatus, events, searchQuery, statusClock])
 
     const showNotice = (message: string) => {
         setNotice(message)
@@ -138,15 +149,18 @@ export default function DisplayPage() {
                         categories={categories}
                         activeCategory={activeCategory}
                         dateRange={dateRange}
+                        customDateRange={customDateRange}
+                        eventStatus={eventStatus}
                         searchQuery={searchQuery}
                         onCategoryChange={setActiveCategory}
-                        customDateRange={customDateRange}
                         onCustomDateRangeChange={setCustomDateRange}
                         onDateRangeChange={setDateRange}
+                        onEventStatusChange={setEventStatus}
                         onSearchChange={setSearchQuery}
                     />
                     <EventsPanel
                         events={visibleEvents}
+                        heading={EVENT_STATUS_HEADINGS[eventStatus]}
                         onOpenEvent={handleOpenEvent}
                     />
                 </div>

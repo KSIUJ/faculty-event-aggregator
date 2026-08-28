@@ -5,6 +5,7 @@ import EventCard from './EventCard'
 
 interface EventsPanelProps {
     events: EventList[]
+    heading: string
     onOpenEvent: (event: EventList) => void
 }
 
@@ -16,7 +17,7 @@ function getEventCountLabel(count: number) {
     return 'wydarzeń'
 }
 
-export default function EventsPanel({ events, onOpenEvent }: EventsPanelProps) {
+export default function EventsPanel({ events, heading, onOpenEvent }: EventsPanelProps) {
     const [currentPage, setCurrentPage] = useState(1)
     const eventCountLabel = getEventCountLabel(events.length)
     const totalPages = Math.max(1, Math.ceil(events.length / EVENTS_PER_PAGE))
@@ -38,7 +39,7 @@ export default function EventsPanel({ events, onOpenEvent }: EventsPanelProps) {
             <div className="events-toolbar">
                 <div>
                     <p className="eyebrow">Kalendarz</p>
-                    <h2 id="events-heading">Nadchodzące wydarzenia</h2>
+                    <h2 id="events-heading">{heading}</h2>
                 </div>
                 <span className="event-count">{String(events.length).padStart(2, '0')} {eventCountLabel}</span>
             </div>
@@ -53,7 +54,7 @@ export default function EventsPanel({ events, onOpenEvent }: EventsPanelProps) {
                 <div className="empty-state">
                     <span className="empty-state__mark" aria-hidden="true">∅</span>
                     <h3>Brak wydarzeń spełniających wybrane kryteria.</h3>
-                    <p>Wybierz inną kategorię lub wyświetl wszystkie nadchodzące wydarzenia.</p>
+                    <p>Zmień status, termin lub kategorię wydarzenia.</p>
                 </div>
             )}
 

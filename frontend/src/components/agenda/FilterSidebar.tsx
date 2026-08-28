@@ -1,12 +1,11 @@
 import { useEffect, useId, useRef, useState } from 'react'
-import { DATE_RANGE_OPTIONS } from '@/config'
+import { DATE_RANGE_OPTIONS, EVENT_STATUS_OPTIONS } from '@/config'
 import type { EventCategory } from '@/types'
-import type { AgendaCategory, AgendaCustomDateRange, AgendaDateRange } from '@/types/agenda'
+import type { AgendaCategory, AgendaCustomDateRange, AgendaDateRange, AgendaEventStatus } from '@/types/agenda'
 import { getEventCategoryFilterColorClass, localizeEventCategory } from '@/utils/eventCategories'
 import {
     formatAgendaDateRangeLabel,
     formatAgendaDateRangeOptionDescription,
-    formatDateInputValue,
     isValidAgendaCustomDateRange,
 } from '@/utils/eventFormatters'
 
@@ -15,10 +14,12 @@ interface FilterSidebarProps {
     activeCategory: AgendaCategory
     dateRange: AgendaDateRange
     customDateRange: AgendaCustomDateRange
+    eventStatus: AgendaEventStatus
     searchQuery: string
     onCategoryChange: (category: AgendaCategory) => void
     onCustomDateRangeChange: (range: AgendaCustomDateRange) => void
     onDateRangeChange: (range: AgendaDateRange) => void
+    onEventStatusChange: (status: AgendaEventStatus) => void
     onSearchChange: (query: string) => void
 }
 
@@ -27,17 +28,18 @@ export default function FilterSidebar({
     activeCategory,
     dateRange,
     customDateRange,
+    eventStatus,
     searchQuery,
     onCategoryChange,
     onCustomDateRangeChange,
     onDateRangeChange,
+    onEventStatusChange,
     onSearchChange,
 }: FilterSidebarProps) {
     const [isDateMenuOpen, setIsDateMenuOpen] = useState(false)
     const [draftCustomRange, setDraftCustomRange] = useState(customDateRange)
     const dateMenuRef = useRef<HTMLDivElement>(null)
     const dateMenuId = useId()
-    const todayInputValue = formatDateInputValue()
     const customRangeIsValid = isValidAgendaCustomDateRange(draftCustomRange)
 
     useEffect(() => {
@@ -97,19 +99,27 @@ export default function FilterSidebar({
                 <h3>Termin</h3>
                 <div className="date-picker" ref={dateMenuRef}>
                     <button
-                        className={`date-picker__trigger ${dateRange !== 'upcoming' ? 'is-active' : ''}`}
+                        className={`date-picker__trigger ${dateRange !== 'all' ? 'is-active' : ''}`}
                         type="button"
                         aria-expanded={isDateMenuOpen}
                         aria-haspopup="dialog"
                         aria-controls={dateMenuId}
                         onClick={() => setIsDateMenuOpen((current) => !current)}
                     >
-                        <span className="date-picker__calendar" aria-hidden="true"><span />▦</span>
+                        <span className="date-picker__calendar" aria-hidden="true">
+                            <svg viewBox="0 0 24 24" focusable="false">
+                                <path d="M4 6h16v15H4zM4 10h16M8 3v5M16 3v5" />
+                                <path className="date-picker__calendar-days" d="M7 13h3v3H7zM14 13h3v3h-3zM7 17h3v2H7zM14 17h3v2h-3z" />
+                            </svg>
+                        </span>
                         <span className="date-picker__trigger-copy">
                             <small>Wybrany termin</small>
                             <strong>{formatAgendaDateRangeLabel(dateRange, customDateRange)}</strong>
                         </span>
-                        <span className="date-picker__chevron" aria-hidden="true">⌄</span>
+                        <span className="date-picker__chevron" aria-hidden="true">
+                            <span className="date-picker__chevron-closed">▼</span>
+                            <span className="date-picker__chevron-open">-</span>
+                        </span>
                     </button>
 
                     {isDateMenuOpen && (
@@ -144,14 +154,32 @@ export default function FilterSidebar({
                                     <div><strong>Własny zakres</strong><small>Wybierz datę początkową i końcową</small></div>
                                 </div>
                                 <div className="custom-date-range__fields">
-                                    <label><span>Od</span><input type="date" value={draftCustomRange.start} min={todayInputValue} max={draftCustomRange.end || undefined} onChange={(event) => setDraftCustomRange((current) => ({ ...current, start: event.target.value }))} /></label>
+                                    <label><span>Od</span><input type="date" value={draftCustomRange.start} max={draftCustomRange.end || undefined} onChange={(event) => setDraftCustomRange((current) => ({ ...current, start: event.target.value }))} /></label>
                                     <span aria-hidden="true">→</span>
-                                    <label><span>Do</span><input type="date" value={draftCustomRange.end} min={draftCustomRange.start || todayInputValue} onChange={(event) => setDraftCustomRange((current) => ({ ...current, end: event.target.value }))} /></label>
+                                    <label><span>Do</span><input type="date" value={draftCustomRange.end} min={draftCustomRange.start || undefined} onChange={(event) => setDraftCustomRange((current) => ({ ...current, end: event.target.value }))} /></label>
                                 </div>
                                 <button className="custom-date-range__apply" type="button" disabled={!customRangeIsValid} onClick={applyCustomRange}>Zastosuj zakres <span aria-hidden="true">→</span></button>
                             </div>
                         </div>
                     )}
+                </div>
+            </div>
+
+            <div className="filter-group">
+                <h3>Status wydarzenia</h3>
+                <div className="status-filter-list" role="group" aria-label="Status wydarzenia">
+                    {EVENT_STATUS_OPTIONS.map((statusOption) => (
+                        <button
+                            className={`status-filter status-filter--${statusOption.value} ${eventStatus === statusOption.value ? 'is-active' : ''}`}
+                            key={statusOption.value}
+                            type="button"
+                            aria-pressed={eventStatus === statusOption.value}
+                            onClick={() => onEventStatusChange(statusOption.value)}
+                        >
+                            <span className="status-filter__icon" aria-hidden="true">{statusOption.icon}</span>
+                            <span><strong>{statusOption.label}</strong><small>{statusOption.description}</small></span>
+                        </button>
+                    ))}
                 </div>
             </div>
 
